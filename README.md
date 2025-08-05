@@ -1,3 +1,3 @@
-## Library / Framework yang digunakan
+## Library / Framework
 1. Tailwind css
 2. Shadcn UI
