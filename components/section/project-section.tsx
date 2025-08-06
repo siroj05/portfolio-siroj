@@ -70,12 +70,12 @@ export default function ProjectSection(){
                 {projects.map((project) => (
                   <div
                     key={project.title}
-                    className="border bg-zinc-800 w-[280px] max-[1240px]:w-full rounded-xl hover:scale-105 duration-150"
+                    className="border dark:bg-zinc-800 bg-zinc-100  w-[280px] max-[1240px]:w-full rounded-xl hover:scale-105 duration-150"
                   >
                     <Image
                       src={project.src}
                       alt={project.title}
-                      className="w-full rounded-t-xl"
+                      className="w-full rounded-t-xl bg-zinc-800"
                       width={300}
                       height={300}
                     />

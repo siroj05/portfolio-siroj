@@ -34,7 +34,7 @@ export default function Portfolio() {
       </div>
 
       {/* footer */}
-      <footer className="bg-zinc-800 h-[100px] flex justify-center items-center">
+      <footer className="dark:bg-zinc-800 bg-zinc-100 h-[100px] flex justify-center items-center">
         <p className="text-center">
           © 2025 Siroojuddin Apendi. All rights reserved.
         </p>

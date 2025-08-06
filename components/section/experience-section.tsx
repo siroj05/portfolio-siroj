@@ -61,7 +61,7 @@ export default function ExperienceSection(){
               {experience.map((exp) => (
                 <div
                   key={exp.office}
-                  className="border dark:bg-zinc-800 p-4 rounded-lg flex gap-2 my-3"
+                  className="border dark:bg-zinc-800 bg-zinc-100 p-4 rounded-lg flex gap-2 my-3"
                 >
                   <div className="flex justify-start">
                     <Briefcase className="bg-blue-500 rounded-full w-10 h-10 p-2" />
@@ -69,7 +69,7 @@ export default function ExperienceSection(){
                   <div className="space-y-1">
                     <h1 className="text-xl font-semibold">{exp.position}</h1>
                     <p className="text-sm text-blue-400">{exp.office}</p>
-                    <p className="text-sm text-slate-300">{exp.year}</p>
+                    <p className="text-sm dark:text-slate-300 text-slate-500">{exp.year}</p>
                     <ul className="list-disc text-sm space-y-1 mt-3">
                       {exp.desc.map((i) => (
                         <li key={i}>{i}</li>

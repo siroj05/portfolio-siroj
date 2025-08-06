@@ -54,9 +54,15 @@ export default function HomeSection() {
 
                         {/* sosial media */}
                         <div className="flex justify-center gap-4">
-                            <Github />
-                            <Linkedin />
-                            <Mail />
+                            <Link href={"https://github.com/siroj05"} target="_blank">
+                                <Github />
+                            </Link>
+                            <Link href={"https://www.linkedin.com/in/siroojuddin-apendi-121a6a1a0/"} target="_blank">
+                                <Linkedin />
+                            </Link>
+                            <a href="mailto:rojudin123@gmail.com">
+                                <Mail />
+                            </a>
                         </div>
                     </div>
                 </div>

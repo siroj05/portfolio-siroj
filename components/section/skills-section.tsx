@@ -96,7 +96,7 @@ export default function SkillsSection(){
                     {coreTech.map((item) => (
                       <div
                         key={item.logo}
-                        className="flex gap-2 border py-1 px-2 rounded-xl hover:bg-slate-800"
+                        className="flex gap-2 border py-1 px-2 rounded-xl hover:dark:bg-slate-800 hover:bg-slate-100"
                       >
                         <Image
                           src={item.logo}
@@ -119,7 +119,7 @@ export default function SkillsSection(){
                     {frontend.map((item) => (
                       <div
                         key={item.logo}
-                        className="flex gap-2 border py-1 px-2 rounded-xl hover:bg-slate-800"
+                        className="flex gap-2 border py-1 px-2 rounded-xl hover:dark:bg-slate-800 hover:bg-slate-100 "
                       >
                         <Image
                           src={item.logo}
@@ -140,7 +140,7 @@ export default function SkillsSection(){
                     {stylingDesign.map((item) => (
                       <div
                         key={item.logo}
-                        className="flex gap-2 border py-1 px-2 rounded-xl hover:bg-slate-800"
+                        className="flex gap-2 border py-1 px-2 rounded-xl hover:dark:bg-slate-800 hover:bg-slate-100 "
                       >
                         <Image
                           src={item.logo}
@@ -163,7 +163,7 @@ export default function SkillsSection(){
                     {databases.map((item) => (
                       <div
                         key={item.logo}
-                        className="flex gap-2 border py-1 px-2 rounded-xl hover:bg-slate-800"
+                        className="flex gap-2 border py-1 px-2 rounded-xl hover:dark:bg-slate-800 hover:bg-slate-100 "
                       >
                         <Image
                           src={item.logo}
