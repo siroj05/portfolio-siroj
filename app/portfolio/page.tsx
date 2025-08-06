@@ -225,10 +225,10 @@ export default function Portfolio() {
                 {/* kontak & view work */}
                 <div className="flex justify-center gap-2">
                   <Button size="lg" asChild>
-                    <Link href={"#mail"}>
+                    <a href="mailto:rojudin123@gmail.com">
                       <Mail />
                       Get In Touch
-                    </Link>
+                    </a>
                   </Button>
                   <Button variant="outline" size="lg" asChild>
                     <Link href={"#project"}>

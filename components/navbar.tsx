@@ -4,6 +4,7 @@ import { useDeviceSize } from "@/hooks/use-device-size";
 import { Menu, X } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
+import ThemeToggleButton from "./themeToggleBtn";
 
 export default function Navbar() {
   const { isMobile, isTablet } = useDeviceSize();
@@ -52,6 +53,8 @@ export default function Navbar() {
             ))}
           </div>
         )}
+
+        <ThemeToggleButton/>
       </div>
     </nav>
   );
