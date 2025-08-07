@@ -9,9 +9,11 @@ import {
     SidebarMenuButton,
     SidebarMenuItem,
 } from "@/components/ui/sidebar"
-import { CircleUser, CodeXml, FolderOpen, Gauge, Mail, UserStar } from "lucide-react"
+import { CircleUser, CodeXml, FolderOpen, Gauge, Mail, SquareArrowOutUpRight, UserStar } from "lucide-react"
 import Link from "next/link"
 import { NavUser } from "./nav-user"
+import { Separator } from "../ui/separator"
+import { usePathname } from "next/navigation"
 
 const menu = [
     {
@@ -42,6 +44,7 @@ const menu = [
 ]
 
 export default function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+    const params = usePathname()
     return (
         <Sidebar collapsible="offcanvas" {...props}>
             <SidebarHeader>
@@ -62,7 +65,7 @@ export default function AppSidebar({ ...props }: React.ComponentProps<typeof Sid
                             {/* menu looping disini */}
                             {
                                 menu.map((item) => (
-                                    <SidebarMenuItem key={item.menuItem}>
+                                    <SidebarMenuItem className={`${params == item.url && "bg-zinc-800 rounded-sm"} `} key={item.menuItem}>
                                         <SidebarMenuButton asChild>
                                             <Link href={item.url}>
                                                 <item.icon />
@@ -72,6 +75,16 @@ export default function AppSidebar({ ...props }: React.ComponentProps<typeof Sid
                                     </SidebarMenuItem>
                                 ))
                             }
+
+                            <Separator className="my-5"/>
+                            <SidebarMenuItem>
+                                <SidebarMenuButton className="dark:bg-primary bg-zinc-200 hover:bg-zinc-300 dark:hover:bg-white dark:text-slate-600" asChild>
+                                    <Link href={"/portfolio"} className="flex justify-between">
+                                        View
+                                        <SquareArrowOutUpRight />
+                                    </Link>
+                                </SidebarMenuButton>
+                            </SidebarMenuItem>
                         </SidebarMenu>
                     </SidebarGroupContent>
                 </SidebarGroup>
