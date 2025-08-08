@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Plus_Jakarta_Sans } from "next/font/google";
 import "./globals.css";
 import { ProgressProviders } from "@/lib/progress-providers";
+import { TooltipProvider } from "@/components/ui/tooltip"
 
 const jakartaSans = Plus_Jakarta_Sans({
   subsets: ["latin"],
@@ -23,7 +24,9 @@ export default function RootLayout({
         className={`${jakartaSans.className} antialiased`}
       >
         <ProgressProviders>
-          {children}
+          <TooltipProvider>
+            {children}
+          </TooltipProvider>
         </ProgressProviders>
       </body>
     </html>

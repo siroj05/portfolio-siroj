@@ -65,7 +65,7 @@ export default function AppSidebar({ ...props }: React.ComponentProps<typeof Sid
                             {/* menu looping disini */}
                             {
                                 menu.map((item) => (
-                                    <SidebarMenuItem className={`${params == item.url && "bg-zinc-800 rounded-sm"} `} key={item.menuItem}>
+                                    <SidebarMenuItem className={`${params.includes(item.url) && "dark:bg-zinc-800 bg-zinc-200 rounded-sm"} `} key={item.menuItem}>
                                         <SidebarMenuButton asChild>
                                             <Link href={item.url}>
                                                 <item.icon />
@@ -77,9 +77,11 @@ export default function AppSidebar({ ...props }: React.ComponentProps<typeof Sid
                             }
 
                             <Separator className="my-5"/>
+
+                            {/* view portfolii */}
                             <SidebarMenuItem>
                                 <SidebarMenuButton className="dark:bg-primary bg-zinc-200 hover:bg-zinc-300 dark:hover:bg-white dark:text-slate-600" asChild>
-                                    <Link href={"/portfolio"} className="flex justify-between">
+                                    <Link href={"/portfolio"} className="flex justify-between" target="_blank">
                                         View
                                         <SquareArrowOutUpRight />
                                     </Link>
