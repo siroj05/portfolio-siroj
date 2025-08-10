@@ -21,9 +21,6 @@ export default function Experiences() {
                 <Separator />
             </div>
             <div className="space-y-10 mt-4">
-                <h1 className="text-center font-bold text-4xl max-[426px]:text-3xl">
-                    Work Experience
-                </h1>
                 <div className="max-w-6xl max-[1240px]:max-w-4xl mx-auto">
                     {EXPERIENCE && EXPERIENCE?.map((exp) => (
                         <div
