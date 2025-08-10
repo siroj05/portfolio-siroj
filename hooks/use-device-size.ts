@@ -1,5 +1,11 @@
 import { useEffect, useState } from "react"
 
+/*
+ * Hook untuk mendeteksi ukuran perangkat
+ * Mengembalikan objek dengan lebar dan status perangkat
+ * Bedanya dengan use-mobile adalah hook ini mengembalikan informasi lebih lengkap tentang ukuran perangkat
+ * Terdapat tiga status perangkat: mobile, tablet, dan desktop
+ */
 export function useDeviceSize() {
   const [width, setWidth] = useState<number>(0)
 

@@ -13,7 +13,7 @@ export default function Layout({children}:Props) {
     return (
         <SidebarProvider>
             <AppSidebar variant="inset" />
-            <SidebarInset>
+            <SidebarInset >
                 <SiteHeader/>
                 <main className="p-4">
                     {children}

@@ -1,3 +1,7 @@
+/**
+ * Hook untuk mengubah huruf pertama menjadi kapital
+ * Mengembalikan string dengan huruf pertama yang dikapitalisasi
+ */
 export function capitalizeFirstLetter(str:string) {
   if (str.length === 0) {
     return ""; // Handle empty strings
