@@ -7,8 +7,6 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import MinimalTiptapEditor from "@/components/ui/minimal-tiptap/minimal-tiptap";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Content } from "@tiptap/react";
-import { useState } from "react"
 import { useForm } from "react-hook-form";
 import { z } from "zod"
 
@@ -79,6 +77,10 @@ export default function AddExperience() {
                                 value={startFrom}
                                 state="startFrom"
                             />
+                            {/* 
+                                @Note
+                                - Kena invalid input
+                            */}
                             <p className="text-sm text-red-500 font-light">{errors.startFrom?.message}</p>
                         </div>
                     </div>
@@ -116,7 +118,7 @@ export default function AddExperience() {
                     editorContentClassName="p-5"
                     output="html"
                     placeholder="Enter your description..."
-                    autofocus={true}
+                    autofocus={false}
                     editable={true}
                     editorClassName="focus:outline-hidden"
                 />

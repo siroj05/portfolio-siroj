@@ -4,7 +4,7 @@ import {
   Briefcase,
 } from "lucide-react";
 
-const experience = [
+export const EXPERIENCE = [
   {
     position: "Frontend Developer",
     office: "PT. Arthamas Solusindo",
@@ -58,7 +58,7 @@ export default function ExperienceSection(){
           <div className="space-y-10">
             <h1 className="text-center font-bold text-4xl max-[426px]:text-3xl">Work Experience</h1>
             <div className="max-w-6xl max-[1240px]:max-w-4xl mx-auto">
-              {experience.map((exp) => (
+              {EXPERIENCE.map((exp) => (
                 <div
                   key={exp.office}
                   className="border dark:bg-zinc-800 bg-zinc-100 p-4 rounded-lg flex gap-2 my-3"
