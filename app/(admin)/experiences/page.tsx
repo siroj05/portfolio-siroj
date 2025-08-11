@@ -8,7 +8,7 @@ import Link from "next/link";
 
 export default function Experiences() {
     return (
-        <div className="bg-card border rounded-lg h-screen">
+        <div className="bg-card border rounded-lg">
             <div className="sticky top-11 z-40 bg-card">
                 <div className="flex justify-end py-3 px-10">
                     <Button asChild>
@@ -21,7 +21,7 @@ export default function Experiences() {
                 <Separator />
             </div>
             <div className="space-y-10 mt-4">
-                <div className="max-w-6xl max-[1240px]:max-w-4xl mx-auto">
+                <div className="max-w-6xl max-[1367px]:max-w-4xl mx-auto">
                     {EXPERIENCE && EXPERIENCE?.map((exp) => (
                         <div
                             key={exp.office}

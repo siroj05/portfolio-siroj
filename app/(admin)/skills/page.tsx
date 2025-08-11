@@ -3,6 +3,7 @@ import { Cards } from "@/components/card/card";
 import { CardsAdd } from "@/components/card/card-add";
 import { CirclePlus } from "lucide-react";
 import { useState } from "react";
+import { SKILLSDATA } from "@/components/section/skills-section";
 
 export const techCategories = [
     {
@@ -35,7 +36,7 @@ export default function DynamicTechForm() {
                 - List category, get dari api get all category
             */}
             {
-                techCategories.map((item,i:number) => (
+                SKILLSDATA.map((item,i:number) => (
                     <Cards
                         key={i}
                         category={item.category}
