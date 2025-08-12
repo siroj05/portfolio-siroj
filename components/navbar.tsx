@@ -20,12 +20,13 @@ export default function Navbar() {
         {(isTablet || isMobile) ? (
           <>
             <button onClick={() => setOpen(!open)} className="z-[99999]">
-              {open ? <X className="text-black dark:text-white" /> : <Menu className="text-black dark:text-white" />}
+              {open ? <X className="text-white" /> : <Menu className="text-black dark:text-white" />}
             </button>
 
             {open && (
               <div className="fixed h-screen inset-0 z-[9999] bg-black/90">
                 <div className="flex flex-col space-y-6 mt-10 items-center">
+                  <ThemeToggleButton/>
                   {menuItems.map((item) => (
                     <Link
                       key={item}
@@ -41,20 +42,23 @@ export default function Navbar() {
             )}
           </>
         ) : (
-          <div className="flex gap-5 items-center font-semibold text-slate-700 dark:text-slate-300">
-            {menuItems.map((item) => (
-              <Link
-                key={item}
-                href={`#${item.toLowerCase()}`}
-                className="hover:text-blue-500 transition"
-              >
-                {item}
-              </Link>
-            ))}
-          </div>
+          <>
+            <div className="flex gap-5 items-center font-semibold text-slate-700 dark:text-slate-300">
+              {menuItems.map((item) => (
+                <Link
+                  key={item}
+                  href={`#${item.toLowerCase()}`}
+                  className="hover:text-blue-500 transition"
+                >
+                  {item}
+                </Link>
+              ))}
+            </div>
+            <ThemeToggleButton/>
+          </>
         )}
 
-        <ThemeToggleButton/>
+        
       </div>
     </nav>
   );
