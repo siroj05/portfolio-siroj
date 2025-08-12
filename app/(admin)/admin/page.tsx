@@ -1,6 +1,6 @@
 import CardDashboard from "@/components/card/card-dashboard";
 import { Button } from "@/components/ui/button";
-import { Briefcase, Inbox } from "lucide-react";
+import { Briefcase, Inbox, UserStar } from "lucide-react";
 import Link from "next/link";
 
 export default function Admin() {
@@ -38,7 +38,7 @@ export default function Admin() {
                     labelBtn="Manage Experiences"
                     total="0"
                     icon={
-                        <Inbox className="w-4 h-4 my-auto text-zinc-500" />
+                        <UserStar className="w-4 h-4 my-auto text-zinc-500" />
                     }
                 />
             </div>
