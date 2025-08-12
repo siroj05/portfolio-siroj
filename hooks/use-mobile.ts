@@ -1,5 +1,12 @@
 import * as React from "react"
 
+/*
+* Hook untuk mendeteksi apakah perangkat adalah mobile
+* Menggunakan useState untuk menyimpan status
+* Menggunakan useEffect untuk menambahkan event listener
+* Mengembalikan boolean yang menunjukkan apakah perangkat adalah mobile
+*/
+
 const MOBILE_BREAKPOINT = 768
 
 export function useIsMobile() {

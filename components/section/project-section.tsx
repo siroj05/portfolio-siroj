@@ -9,7 +9,7 @@ import {
 import Image from "next/image";
 import Link from "next/link";
 
-const projects = [
+export const PROJECTS = [
   {
     src: "/hoyolab-clone.png",
     title: "Hoyolab Clone",
@@ -67,7 +67,7 @@ export default function ProjectSection(){
             <h1 className="text-center font-bold text-4xl max-[426px]:text-3xl">Projects</h1>
             <div className="max-w-6xl max-[1240px]:max-w-4xl max-[1024px]:max-w-2xl mx-auto">
               <div className="grid grid-cols-4 gap-4 max-[1240px]:grid-cols-3 max-[1240px]:gap-5 max-[691px]:grid-cols-2 max-[426px]:grid-cols-1">
-                {projects.map((project) => (
+                {PROJECTS.map((project) => (
                   <div
                     key={project.title}
                     className="border dark:bg-zinc-800 bg-zinc-100  w-[280px] max-[1240px]:w-full rounded-xl hover:scale-105 duration-150"
