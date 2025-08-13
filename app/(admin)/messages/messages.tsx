@@ -1,7 +1,11 @@
 "use client"
+import { GetAllMessages } from "@/api/messages/messages";
+import { Messages } from "@/api/messages/type";
+import { ResponseApi } from "@/api/type";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
-import { useTruncate } from "@/hooks/use-truncate";
+import { truncateText } from "@/hooks/use-truncate";
+import { useQuery } from "@tanstack/react-query";
 import { CheckCheck, Inbox, Trash2 } from "lucide-react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
@@ -11,46 +15,17 @@ import { useSearchParams } from "next/navigation";
  * Terdiri dari dua bagian: Inbox dan Read
  */
 
-/*
- * Variable messages data dummy
- * Nextnya messages diambil dari backend 
- */
-const messages = [
-  {
-    uuid : 1,
-    email: "user1@email.com",
-    content: "Halo, saya ingin bertanya tentang portfolio Anda.",
-    time: "2025-08-10 10:00",
-  },
-  {
-    uuid : 2,
-    email: "user2@email.com",
-    content: "Bagaimana cara menghubungi Anda?",
-    time: "2025-08-10 11:15",
-  },
-  {
-    uuid : 3,
-    email: "user3@email.com",
-    content: "Proyek Anda sangat menarik!",
-    time: "2025-08-10 12:30",
-  },
-  {
-    uuid : 4,
-    email: "user3@email.com",
-    content: "Proyek Anda sangat menarik!",
-    time: "2025-08-10 12:30",
-  },
-];
-
 export default function MessagesPage() {
 
   const searchParams = useSearchParams()
   const searchMsg = searchParams.get("msg")
+  const { data, isError, isLoading } = useQuery<ResponseApi<Messages[]>>({queryKey : ['messages'], queryFn : GetAllMessages})
   /*
    * Mendapatkan pesan yang dipilih
+   * Next nya penerapan isError & isLoading
    */
-  const selectedMessage = messages.find(msg => msg.uuid === parseInt(searchMsg || "0"))
-  // console.log(selectedMessage)
+  const selectedMessage = data?.data.find(msg => msg.id === parseInt(searchMsg || "0"))
+  
   return (
     <div className="bg-card border rounded-lg min-h-[calc(100vh-6rem)]">
       <div className="bg-card">
@@ -84,12 +59,12 @@ export default function MessagesPage() {
             <Separator />
             {/* List message scrollable */}
               <div className="flex-1 overflow-auto p-2 space-y-4 max-h-[calc(100vh-16rem)]">
-                {messages.map((msg, idx) => (
+                {data?.data?.map((msg, idx) => (
                   <div key={idx} className="rounded p-2 bg-muted flex justify-between">
-                    <Link href={`?msg=${msg.uuid}`} className="flex-1 ">
-                      <div className="text-xs text-gray-500">{msg.time}</div>
+                    <Link href={`?msg=${msg.id}`} className="flex-1 ">
+                      <div className="text-xs text-gray-500">{msg.createdAt}</div>
                       <div className="font-semibold">{msg.email}</div>
-                      <div className="text-sm">{useTruncate(msg.content, 30)}</div>
+                      <div className="text-sm">{truncateText(msg.message, 30)}</div>
                     </Link>
                     <Button variant="destructive" className="cursor-pointer" size="sm">
                       <Trash2/>
@@ -116,7 +91,7 @@ export default function MessagesPage() {
                         </div>
                         <div>
                           <div className="font-semibold">{selectedMessage.email}</div>
-                          <div className="text-xs text-gray-500">{selectedMessage.time}</div>
+                          <div className="text-xs text-gray-500">{selectedMessage.createdAt}</div>
                         </div>
                       </div>
                       <Button variant="destructive" className="cursor-pointer">
@@ -125,7 +100,7 @@ export default function MessagesPage() {
                       </Button>
                     </div>
                     <Separator className="my-4"/>
-                    <div className="mt-2">{selectedMessage.content}</div>
+                    <div className="mt-2">{selectedMessage.message}</div>
                   </div>
                 ) : (
                   <div className="flex flex-col items-center justify-center space-y-4">

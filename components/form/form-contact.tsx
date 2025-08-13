@@ -9,7 +9,7 @@ import {z} from "zod"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { LabelError } from "../label-error"
-import { useMutation } from "@tanstack/react-query"
+import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { CreateMessage } from "@/api/messages/messages"
 import { toast } from "sonner"
 
@@ -31,10 +31,12 @@ export default function FormContact(){
         resolver : zodResolver(formSchema)
     })
 
+    const queryClient = useQueryClient()
     const {mutate, isPending} = useMutation({
         mutationFn : (data : FormData) => CreateMessage(data),
         onSuccess : () => {
             toast.success("Succesfully sent the message")
+            queryClient.invalidateQueries({queryKey : ['messages']})
             reset()
         },
         onError : (err) => {
