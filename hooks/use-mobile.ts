@@ -7,9 +7,7 @@ import * as React from "react"
 * Mengembalikan boolean yang menunjukkan apakah perangkat adalah mobile
 */
 
-const MOBILE_BREAKPOINT = 768
-
-export function useIsMobile() {
+export function useIsMobile(MOBILE_BREAKPOINT = 768) {
   const [isMobile, setIsMobile] = React.useState<boolean | undefined>(undefined)
 
   React.useEffect(() => {
