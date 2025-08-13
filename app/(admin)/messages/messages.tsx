@@ -1,14 +1,17 @@
 "use client"
-import { GetAllMessages } from "@/api/messages/messages";
+import { DeleteMessage, GetAllMessages } from "@/api/messages/messages";
 import { Messages } from "@/api/messages/type";
 import { ResponseApi } from "@/api/type";
+import { AlertDialogDelete } from "@/components/dialog/alert-dialog";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { truncateText } from "@/hooks/use-truncate";
-import { useQuery } from "@tanstack/react-query";
-import { CheckCheck, Inbox, Trash2 } from "lucide-react";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { CheckCheck, Inbox, LoaderCircle, Trash2 } from "lucide-react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
+import { useState } from "react";
+import { toast } from "sonner";
 
 /*
  * Komponen untuk menampilkan pesan
@@ -19,38 +22,61 @@ export default function MessagesPage() {
 
   const searchParams = useSearchParams()
   const searchMsg = searchParams.get("msg")
-  const { data, isError, isLoading } = useQuery<ResponseApi<Messages[]>>({queryKey : ['messages'], queryFn : GetAllMessages})
+  const [open, setOpen] = useState(false)
+  const [getId, setGetId] = useState(0)
+  const queryClient = useQueryClient()
+  // hit api get all message
+  const { data, isError, isLoading } = useQuery<ResponseApi<Messages[]>>({ queryKey: ['messages'], queryFn: GetAllMessages })
+
+  // hit api delete message
+  const { mutate, isPending, isSuccess } = useMutation({
+    mutationFn: (id: number) => DeleteMessage(id),
+    onSuccess: () => {
+      queryClient.invalidateQueries({queryKey : ['messages']})
+      setOpen(false)
+      toast.success("Message Deleted")
+    },
+    onError: (err) => {
+      toast.error(`Error : ${err.message}`)
+    }
+  })
+
+  const onDelete = (id: number) => {
+    mutate(id)
+  }
+
   /*
    * Mendapatkan pesan yang dipilih
    * Next nya penerapan isError & isLoading
    */
   const selectedMessage = data?.data.find(msg => msg.id === parseInt(searchMsg || "0"))
-  
-  return (
-    <div className="bg-card border rounded-lg min-h-[calc(100vh-6rem)]">
-      <div className="bg-card">
-        <div className="p-4 flex justify-between gap-10">
-          <h1 className="text-lg my-auto font-semibold">Messages</h1>
-          
-          {/*Belum butuh input search nextnya mungkin*/}
-          {/* <Input className="w-[400px]" placeholder="Search message.." /> */}
-          
-          <div className="space-x-2">
-            <Button className="cursor-pointer">
-              <CheckCheck /> Mark all as read
-            </Button>
-            <Button className="cursor-pointer" variant="destructive">
-              <Trash2 /> Delete all messages
-            </Button>
-          </div>
-        </div>
-        <Separator />
-      </div>
 
-      {/* 
-        body
-      */}
-      <div className="flex flex-1 p-2 gap-4">
+  return (
+    <>
+      <div className="bg-card border rounded-lg min-h-[calc(100vh-6rem)]">
+        <div className="bg-card">
+          <div className="p-4 flex justify-between gap-10">
+            <h1 className="text-lg my-auto font-semibold">Messages</h1>
+
+            {/*Belum butuh input search nextnya mungkin*/}
+            {/* <Input className="w-[400px]" placeholder="Search message.." /> */}
+
+            <div className="space-x-2">
+              <Button className="cursor-pointer">
+                <CheckCheck /> Mark all as read
+              </Button>
+              <Button className="cursor-pointer" variant="destructive">
+                <Trash2 /> Delete all messages
+              </Button>
+            </div>
+          </div>
+          <Separator />
+        </div>
+
+        {/* 
+          body
+        */}
+        <div className="flex flex-1 p-2 gap-4">
           {/* Inbox */}
           <div className="flex flex-col w-[30%] min-w-[220px] max-w-[350px] min-h-[calc(100vh-12rem)] border rounded-lg">
             <div className="p-4">
@@ -58,20 +84,35 @@ export default function MessagesPage() {
             </div>
             <Separator />
             {/* List message scrollable */}
-              <div className="flex-1 overflow-auto p-2 space-y-4 max-h-[calc(100vh-16rem)]">
-                {data?.data?.map((msg, idx) => (
+            <div className="flex-1 overflow-auto p-2 space-y-4 max-h-[calc(100vh-16rem)]">
+              {data?.data?.map((msg, idx) => {
+                return (
                   <div key={idx} className="rounded p-2 bg-muted flex justify-between">
                     <Link href={`?msg=${msg.id}`} className="flex-1 ">
                       <div className="text-xs text-gray-500">{msg.createdAt}</div>
                       <div className="font-semibold">{msg.email}</div>
                       <div className="text-sm">{truncateText(msg.message, 30)}</div>
                     </Link>
-                    <Button variant="destructive" className="cursor-pointer" size="sm">
-                      <Trash2/>
+
+                    {/* delete trigger */}
+                    <Button 
+                      onClick={
+                        () => {
+                          setOpen(true)
+                          setGetId(msg.id!)
+                        }
+                      } 
+                      variant="destructive" 
+                      className="cursor-pointer" 
+                      size="sm"
+                    >
+                      <Trash2 />
                     </Button>
+
                   </div>
-                ))}
-              </div>
+                )
+              })}
+            </div>
           </div>
 
           {/* Read Message */}
@@ -95,16 +136,16 @@ export default function MessagesPage() {
                         </div>
                       </div>
                       <Button variant="destructive" className="cursor-pointer">
-                        <Trash2/>
+                        <Trash2 />
                         Delete
                       </Button>
                     </div>
-                    <Separator className="my-4"/>
+                    <Separator className="my-4" />
                     <div className="mt-2">{selectedMessage.message}</div>
                   </div>
                 ) : (
                   <div className="flex flex-col items-center justify-center space-y-4">
-                    <Inbox className="text-gray-600"/>
+                    <Inbox className="text-gray-600" />
                     <p className="text-sm text-gray-600">
                       Select a message to read
                     </p>
@@ -113,7 +154,26 @@ export default function MessagesPage() {
               </div>
             </div>
           </div>
+        </div>
       </div>
-    </div>
+
+      <AlertDialogDelete
+        open={open}
+        onOpenChange={setOpen}
+        footer={
+          <>
+            <Button onClick={() => setOpen(false)}>Cancel</Button>
+            <Button onClick={() => onDelete(getId)} disabled={isPending} variant="destructive">
+              {
+                isPending ?
+                <LoaderCircle className="animate-spin"/>
+                :
+                "Delete"
+              }
+            </Button>
+          </>
+        }
+      />
+    </>
   );
 }
