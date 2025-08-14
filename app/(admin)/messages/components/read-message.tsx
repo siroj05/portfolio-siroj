@@ -3,18 +3,20 @@ import { Messages } from "@/api/messages/type";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { Inbox, Trash2 } from "lucide-react";
-
-interface Props {
+import { Sheet, SheetContent, SheetTitle } from "@/components/ui/sheet";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+interface DesktopProps {
   selectedMessage: Messages | undefined
   setOpen: (open: boolean) => void
   setGetId: (id: number) => void
 }
 
-export default function ReadMessage({ 
+// desktop size
+export function ReadMessage({
   selectedMessage,
   setOpen,
   setGetId
-}: Props) {
+}: DesktopProps) {
   return (
     <div className="flex-1 h-full">
       <div className="border rounded-lg overflow-auto flex flex-col h-full">
@@ -58,4 +60,64 @@ export default function ReadMessage({
       </div>
     </div>
   );
+}
+
+interface MobileProps {
+  selectedMessage: Messages | undefined
+  setOpen: (open: boolean) => void
+  setGetId: (id: number) => void
+  setMobileOpen: (value: boolean) => void
+  mobileOpen : boolean
+  clearParams : () => void
+}
+// mobile size
+export function ReadMessageMobile({
+  selectedMessage,
+  setOpen,
+  setGetId,
+  setMobileOpen,
+  mobileOpen,
+  clearParams
+}: MobileProps) {
+  return (
+    <Sheet
+      open={mobileOpen && !!selectedMessage}
+      onOpenChange={(e) => {
+        setMobileOpen(e);
+        clearParams()
+      }}
+    >
+      <SheetContent side="bottom" className="bg-card h-[90%] p-2">
+        <div className="flex h-full flex-col">
+          <SheetTitle className="text-base flex items-center gap-2">
+            <Avatar className="h-7 w-7">
+              <AvatarFallback>
+                {selectedMessage?.email.split("")[0]}
+              </AvatarFallback>
+            </Avatar>
+            <span className="truncate">
+              {selectedMessage?.email}
+            </span>
+          </SheetTitle>
+          <Separator className="my-2" />
+          <div className="p-2">
+            <p className="text-sm dark:text-zinc-300">
+              Received : {selectedMessage?.createdAt}
+            </p>
+          </div>
+          <Separator className="my-2" />
+
+          <div className="p-2">
+            <p>{selectedMessage?.message}</p>
+          </div>
+        </div>
+        <div className="sticky bottom-0 border-t p-2">
+          <Button onClick={() => {
+            setOpen(true);
+            setGetId(selectedMessage!.id!);
+          }} variant="outline"><Trash2 className="text-red-500" />Delete</Button>
+        </div>
+      </SheetContent>
+    </Sheet>
+  )
 }

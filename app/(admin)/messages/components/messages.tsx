@@ -11,10 +11,8 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
 import { toast } from "sonner";
 import InboxList from "./inbox-list";
-import ReadMessage from "./read-message";
+import {ReadMessage, ReadMessageMobile} from "./read-message";
 import { useIsMobile } from "@/hooks/use-mobile";
-import { Sheet, SheetContent, SheetTitle } from "@/components/ui/sheet";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 
 /*
  * Komponen untuk menampilkan pesan
@@ -30,6 +28,11 @@ export default function MessagesPage() {
   const router = useRouter();
   const isMobile = useIsMobile(769);
   const [mobileOpen, setMobileOpen] = useState(false);
+
+  const clearParams = () => {
+    router.push("/messages")
+  }
+
   // hit api get all message
   const { data, isError, isLoading } = useQuery<ResponseApi<Messages[]>>({
     queryKey: ["messages"],
@@ -43,7 +46,7 @@ export default function MessagesPage() {
       queryClient.invalidateQueries({ queryKey: ["messages"] });
       setOpen(false);
       toast.success("Message Deleted");
-      router.push("/messages");
+      clearParams()
     },
     onError: (err) => {
       toast.error(`Error : ${err.message}`);
@@ -91,46 +94,14 @@ export default function MessagesPage() {
 
           {/* Read Message */}
           {isMobile ? (
-            // sheet ini di refactor
-            <Sheet
-              open={mobileOpen && !!selectedMessage}
-              onOpenChange={(e) => {
-                setMobileOpen(e);
-                router.push("/messages");
-              }}
-            >
-              <SheetContent side="bottom" className="bg-card h-[90%] p-2">
-                <div className="flex h-full flex-col">
-                  <SheetTitle className="text-base flex items-center gap-2">
-                    <Avatar className="h-7 w-7">
-                      <AvatarFallback>
-                        {selectedMessage?.email.split("")[0]}
-                      </AvatarFallback>
-                    </Avatar>
-                    <span className="truncate">
-                      {selectedMessage?.email}
-                    </span>
-                  </SheetTitle>
-                  <Separator className="my-2" />
-                  <div className="p-2">
-                    <p className="text-sm dark:text-zinc-300">
-                      Received : {selectedMessage?.createdAt}
-                    </p>
-                  </div>
-                  <Separator className="my-2" />
-
-                  <div className="p-2">
-                    <p>{selectedMessage?.message}</p>
-                  </div>
-                </div>
-                <div className="sticky bottom-0 border-t p-2">
-                  <Button onClick={() => {
-                    setOpen(true);
-                    setGetId(selectedMessage!.id!);
-                  }} variant="outline"><Trash2 className="text-red-500"/>Delete</Button>
-                </div>
-              </SheetContent>
-            </Sheet>
+            <ReadMessageMobile
+              selectedMessage={selectedMessage}
+              setOpen={setOpen}
+              setGetId={setGetId}
+              setMobileOpen={setMobileOpen}
+              mobileOpen={mobileOpen}
+              clearParams={clearParams}
+            />
           ) : (
             <ReadMessage
               selectedMessage={selectedMessage}
