@@ -1,7 +1,8 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { ResponseApi } from "../type"
 import { Messages } from "./type"
-import { CreateMessage, DeleteMessage, GetAllMessages, MarkMessage } from "./messages.api"
+import { CreateMessage, DeleteMessage, GetAllMessages, MarkAllMessages, MarkMessage } from "./messages.api"
+import { toast } from "sonner"
 
 /*
 *buat react query untuk hit api message disini
@@ -66,5 +67,20 @@ export const useMarkMessage = (
             options?.onSuccess?.()
         },
         onError: options?.onError
+    })
+}
+
+// mark all message
+export const useMarkAllMessages = () => {
+    const queryClient = useQueryClient()
+    return useMutation({
+        mutationFn: MarkAllMessages,
+        onSuccess : ()=>{
+            queryClient.invalidateQueries({queryKey : ["messages"]})
+            toast.success("Successfully marked all messages as read")
+        },
+        onError : (err) => {
+            toast.error(`Failed to marked all messages, ${err}`)
+        }
     })
 }

@@ -10,7 +10,8 @@ import { toast } from "sonner";
 import InboxList from "./inbox-list";
 import {ReadMessage, ReadMessageMobile} from "./read-message";
 import { useIsMobile } from "@/hooks/use-mobile";
-import { Mark, useDeleteMessage, useGetAllMessages, useMarkMessage } from "@/api/messages";
+import { Mark, useDeleteMessage, useGetAllMessages, useMarkAllMessages, useMarkMessage } from "@/api/messages";
+import { Spinner } from "@/components/ui/minimal-tiptap/components/spinner";
 
 /*
  * Komponen untuk menampilkan pesan
@@ -33,6 +34,8 @@ export default function MessagesPage() {
 
   // hit api get all message
   const { data, isError, isLoading } = useGetAllMessages()
+  // find data which isread false
+  const findIsRead = data?.data.find((msg) => msg.isRead == false)
 
   // hit api delete message
   const { mutate, isPending } = useDeleteMessage({
@@ -51,6 +54,7 @@ export default function MessagesPage() {
     mutate(id);
   };
 
+  // hit api mark message
   const {mutate:mark} = useMarkMessage({
     onError: (err) => {
       toast.error(`Error : ${err.message}`)
@@ -60,6 +64,14 @@ export default function MessagesPage() {
   // handle mark message
   const onMark = (markMessage:Mark) => {
     mark(markMessage)
+  }
+
+  // hit api marked all messages
+  const {mutate:markAll, isPending:markPending} = useMarkAllMessages()
+
+  // handle marked all messages
+  const onMarkAll = () => {
+    markAll()
   }
 
   /*
@@ -77,8 +89,13 @@ export default function MessagesPage() {
           <div className="p-4 flex justify-between max-[537px]:flex-col gap-10">
             <h1 className="text-lg my-auto font-semibold">Messages</h1>
             <div className="space-x-2 max-[537px]:flex-col max-[537px]:flex max-[537px]:space-y-2">
-              <Button className="cursor-pointer max-[537px]:w-full">
-                <CheckCheck /> Mark all as read
+              <Button onClick={onMarkAll} disabled={!!!findIsRead? true : markPending} className="cursor-pointer max-[537px]:w-full">
+                {
+                  markPending? 
+                  <Spinner className="animate-spine"/> :
+                  <CheckCheck /> 
+                }
+                Mark all as read
               </Button>
               <Button className="cursor-pointer max-[537px]:w-full" variant="destructive">
                 <Trash2 /> Delete all messages
