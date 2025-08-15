@@ -1,11 +1,8 @@
 "use client";
-import { DeleteMessage, GetAllMessages } from "@/api/messages/messages";
-import { Messages } from "@/api/messages/type";
-import { ResponseApi } from "@/api/type";
+
 import { AlertDialogDelete } from "@/components/dialog/alert-dialog";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { CheckCheck, LoaderCircle, Trash2, X } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
@@ -13,6 +10,7 @@ import { toast } from "sonner";
 import InboxList from "./inbox-list";
 import {ReadMessage, ReadMessageMobile} from "./read-message";
 import { useIsMobile } from "@/hooks/use-mobile";
+import { useDeleteMessage, useGetAllMessages } from "@/api/messages";
 
 /*
  * Komponen untuk menampilkan pesan
@@ -24,26 +22,21 @@ export default function MessagesPage() {
   const searchMsg = searchParams.get("msg");
   const [open, setOpen] = useState(false);
   const [getId, setGetId] = useState(0);
-  const queryClient = useQueryClient();
   const router = useRouter();
   const isMobile = useIsMobile(769);
   const [mobileOpen, setMobileOpen] = useState(false);
 
+  // clear params query setelah action
   const clearParams = () => {
     router.push("/messages")
   }
 
   // hit api get all message
-  const { data, isError, isLoading } = useQuery<ResponseApi<Messages[]>>({
-    queryKey: ["messages"],
-    queryFn: GetAllMessages,
-  });
+  const { data, isError, isLoading } = useGetAllMessages()
 
   // hit api delete message
-  const { mutate, isPending, isSuccess } = useMutation({
-    mutationFn: (id: number) => DeleteMessage(id),
+  const { mutate, isPending } = useDeleteMessage({
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["messages"] });
       setOpen(false);
       toast.success("Message Deleted");
       clearParams()
@@ -51,7 +44,7 @@ export default function MessagesPage() {
     onError: (err) => {
       toast.error(`Error : ${err.message}`);
     },
-  });
+  })
 
   const onDelete = (id: number) => {
     mutate(id);

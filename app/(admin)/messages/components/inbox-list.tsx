@@ -1,4 +1,4 @@
-import { Messages } from "@/api/messages/type";
+import { Messages } from "@/api/messages";
 import { ResponseApi } from "@/api/type";
 import { Separator } from "@/components/ui/separator";
 import { truncateText } from "@/hooks/use-truncate";

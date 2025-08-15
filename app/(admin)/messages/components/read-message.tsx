@@ -1,5 +1,5 @@
 "use client"
-import { Messages } from "@/api/messages/type";
+import { Messages } from "@/api/messages";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { Inbox, Trash2 } from "lucide-react";
