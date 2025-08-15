@@ -5,12 +5,12 @@ import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { CheckCheck, LoaderCircle, Trash2, X } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useState } from "react";
+import { use, useState } from "react";
 import { toast } from "sonner";
 import InboxList from "./inbox-list";
 import {ReadMessage, ReadMessageMobile} from "./read-message";
 import { useIsMobile } from "@/hooks/use-mobile";
-import { Mark, useDeleteMessage, useGetAllMessages, useMarkAllMessages, useMarkMessage } from "@/api/messages";
+import { Mark, useDeleteAllMessages, useDeleteMessage, useGetAllMessages, useMarkAllMessages, useMarkMessage } from "@/api/messages";
 import { Spinner } from "@/components/ui/minimal-tiptap/components/spinner";
 
 /*
@@ -26,7 +26,8 @@ export default function MessagesPage() {
   const router = useRouter();
   const isMobile = useIsMobile(769);
   const [mobileOpen, setMobileOpen] = useState(false);
-
+  type DeleteMode = "single" | "all"
+  const [deleteMode, setDeleteMode] = useState<DeleteMode>("single");
   // clear params query setelah action
   const clearParams = () => {
     router.push("/messages")
@@ -53,6 +54,29 @@ export default function MessagesPage() {
   const onDelete = (id: number) => {
     mutate(id);
   };
+
+  // hit api delete all messages
+  const {mutate:deleteAll, isPending:deleteAllPending} = useDeleteAllMessages({
+    onSuccess: () => {
+      toast.success("All messages deleted");
+      clearParams();
+      setOpen(false);
+    }
+  })
+
+  // handle delete all messages
+  const onDeleteAll = () => {
+    deleteAll()
+  }
+
+  // handle delete by mode
+  const handleDelete = () => {
+    if (deleteMode === "single") {
+      onDelete(getId);
+    } else {
+      onDeleteAll();
+    }
+  }
 
   // hit api mark message
   const {mutate:mark} = useMarkMessage({
@@ -97,7 +121,10 @@ export default function MessagesPage() {
                 }
                 Mark all as read
               </Button>
-              <Button className="cursor-pointer max-[537px]:w-full" variant="destructive">
+              <Button onClick={() => {
+                setDeleteMode("all");
+                setOpen(true);
+              }} className="cursor-pointer max-[537px]:w-full" variant="destructive">
                 <Trash2 /> Delete all messages
               </Button>
             </div>
@@ -125,12 +152,14 @@ export default function MessagesPage() {
               setMobileOpen={setMobileOpen}
               mobileOpen={mobileOpen}
               clearParams={clearParams}
+              setDeleteMode={setDeleteMode}
             />
           ) : (
             <ReadMessage
               selectedMessage={selectedMessage}
               setOpen={setOpen}
               setGetId={setGetId}
+              setDeleteMode={setDeleteMode}
             />
           )}
         </div>
@@ -146,11 +175,11 @@ export default function MessagesPage() {
             </Button>
             <Button
               className="cursor-pointer"
-              onClick={() => onDelete(getId)}
-              disabled={isPending}
+              onClick={handleDelete}
+              disabled={isPending || deleteAllPending}
               variant="destructive"
             >
-              {isPending ? <LoaderCircle className="animate-spin" /> : "Delete"}
+              {(isPending || deleteAllPending) ? <LoaderCircle className="animate-spin" /> : "Delete"}
             </Button>
           </>
         }

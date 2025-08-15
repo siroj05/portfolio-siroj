@@ -1,7 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { ResponseApi } from "../type"
 import { Messages } from "./type"
-import { CreateMessage, DeleteMessage, GetAllMessages, MarkAllMessages, MarkMessage } from "./messages.api"
+import { CreateMessage, DeleteAllMessages, DeleteMessage, GetAllMessages, MarkAllMessages, MarkMessage } from "./messages.api"
 import { toast } from "sonner"
 
 /*
@@ -31,6 +31,27 @@ export const useDeleteMessage = (
             options?.onSuccess?.()
         },
         onError: options?.onError,
+    })
+}
+
+// delete all messages
+export const useDeleteAllMessages = (
+    options?:{
+        onSuccess?:() => void
+    }
+) => {
+    const queryClient = useQueryClient()
+
+    return useMutation({
+        mutationFn : DeleteAllMessages,
+        onSuccess : () => {
+            queryClient.invalidateQueries({queryKey:["messages"]})
+            toast.success("Successfully deleted all messages")
+            options?.onSuccess?.()
+        },
+        onError : (err) =>{
+            toast.error(`Failed to delete all messages, ${err}`)
+        }
     })
 }
 

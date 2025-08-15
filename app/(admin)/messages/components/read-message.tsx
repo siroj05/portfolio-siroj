@@ -9,13 +9,15 @@ interface DesktopProps {
   selectedMessage: Messages | undefined
   setOpen: (open: boolean) => void
   setGetId: (id: number) => void
+  setDeleteMode : (value : "single" | "all") => void
 }
 
 // desktop size
 export function ReadMessage({
   selectedMessage,
   setOpen,
-  setGetId
+  setGetId,
+  setDeleteMode
 }: DesktopProps) {
   return (
     <div className="flex-1 h-full">
@@ -44,6 +46,7 @@ export function ReadMessage({
                 <Button onClick={() => {
                   setOpen(true);
                   setGetId(selectedMessage.id!);
+                  setDeleteMode("single")
                 }} variant="destructive" className="cursor-pointer">
                   <Trash2 />
                   Delete
@@ -71,6 +74,7 @@ interface MobileProps {
   setMobileOpen: (value: boolean) => void
   mobileOpen : boolean
   clearParams : () => void
+  setDeleteMode : (value : "single" | "all") => void
 }
 // mobile size
 export function ReadMessageMobile({
@@ -79,7 +83,8 @@ export function ReadMessageMobile({
   setGetId,
   setMobileOpen,
   mobileOpen,
-  clearParams
+  clearParams,
+  setDeleteMode
 }: MobileProps) {
   return (
     <Sheet
@@ -117,6 +122,7 @@ export function ReadMessageMobile({
           <Button onClick={() => {
             setOpen(true);
             setGetId(selectedMessage!.id!);
+            setDeleteMode("single")
           }} variant="outline"><Trash2 className="text-red-500" />Delete</Button>
         </div>
       </SheetContent>
