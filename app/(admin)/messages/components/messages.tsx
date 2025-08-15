@@ -10,7 +10,7 @@ import { toast } from "sonner";
 import InboxList from "./inbox-list";
 import {ReadMessage, ReadMessageMobile} from "./read-message";
 import { useIsMobile } from "@/hooks/use-mobile";
-import { useDeleteMessage, useGetAllMessages } from "@/api/messages";
+import { Mark, useDeleteMessage, useGetAllMessages, useMarkMessage } from "@/api/messages";
 
 /*
  * Komponen untuk menampilkan pesan
@@ -46,9 +46,24 @@ export default function MessagesPage() {
     },
   })
 
+  // handle delete function
   const onDelete = (id: number) => {
     mutate(id);
   };
+
+  const {mutate:mark} = useMarkMessage({
+    // onSuccess : () =>{
+    //   toast.success("Marked!")
+    // },
+    onError: (err) => {
+      toast.error(`Error : ${err.message}`)
+    }
+  })
+
+  // handle mark message
+  const onMark = (markMessage:Mark) => {
+    mark(markMessage)
+  }
 
   /*
    * Mendapatkan pesan yang dipilih
@@ -83,6 +98,8 @@ export default function MessagesPage() {
             data={data}
             isMobile={isMobile}
             setMobileOpen={setMobileOpen}
+            onMark={onMark}
+            currentMessage={Number(searchMsg)}
           />
 
           {/* Read Message */}

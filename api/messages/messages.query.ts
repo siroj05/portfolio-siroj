@@ -1,7 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { ResponseApi } from "../type"
 import { Messages } from "./type"
-import { CreateMessage, DeleteMessage, GetAllMessages } from "./messages.api"
+import { CreateMessage, DeleteMessage, GetAllMessages, MarkMessage } from "./messages.api"
 
 /*
 *buat react query untuk hit api message disini
@@ -38,13 +38,30 @@ export const useCreateMessage = (
     options? : {
         onSuccess? : () => void
         onError? : (err : any) => void
-        
     }
 ) => {
     const queryClient = useQueryClient()
     return useMutation({
         mutationFn : CreateMessage,
         onSuccess : () => {
+            queryClient.invalidateQueries({queryKey : ["messages"]})
+            options?.onSuccess?.()
+        },
+        onError: options?.onError
+    })
+}
+
+// mark message
+export const useMarkMessage = (
+    options? : {
+        onSuccess? : () => void
+        onError? : (err : any) => void
+    }
+) => {
+    const queryClient = useQueryClient()
+    return useMutation({
+        mutationFn: MarkMessage,
+        onSuccess : ()=>{
             queryClient.invalidateQueries({queryKey : ["messages"]})
             options?.onSuccess?.()
         },

@@ -20,11 +20,13 @@ export function ReadMessage({
   return (
     <div className="flex-1 h-full">
       <div className="border rounded-lg overflow-auto flex flex-col h-full">
-        <div className="p-4">
-          <h2 className="text-lg font-semibold">Read Message</h2>
+        <div className="sticky top-0 bg-card">
+          <div className="p-4">
+            <h2 className="text-lg font-semibold">Read Message</h2>
+          </div>
+          <Separator />
         </div>
-        <Separator />
-        <div className="p-4 flex-1">
+        <div className="p-4 flex-1 max-h-[calc(100vh-15.5rem)]">
           {selectedMessage ? (
             <div className="bg-muted p-4 rounded-md">
               <div className="flex justify-between">
@@ -48,7 +50,7 @@ export function ReadMessage({
                 </Button>
               </div>
               <Separator className="my-4" />
-              <div className="mt-2">{selectedMessage.message}</div>
+              <div className="mt-2"><p className="break-all">{selectedMessage.message}</p></div>
             </div>
           ) : (
             <div className="flex flex-col items-center justify-center space-y-4">

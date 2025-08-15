@@ -5,3 +5,8 @@ export type Messages = {
     isRead? : boolean
     createdAt? : string
 }
+
+export type Mark = {
+    id : number
+    mark : boolean
+}

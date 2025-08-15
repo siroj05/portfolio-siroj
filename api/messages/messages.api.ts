@@ -1,6 +1,5 @@
-import { number } from "zod"
 import { ResponseApi } from "../type"
-import { Messages } from "./type"
+import { Mark, Messages } from "./type"
 import axios from "axios"
 
 // next ganti .env
@@ -45,6 +44,25 @@ export const GetAllMessages = async <T = Messages[]>():Promise<ResponseApi<T>> =
 export const DeleteMessage = async <T>(id : number):Promise<ResponseApi<T>> => {
     try {
         const res = await axios.delete(`${BASE_URL}/messages/${id}`)
+        return res.data
+    } catch (error) {
+        if (axios.isAxiosError(error)) {
+            const errorMsg =
+                typeof error.response?.data === "string"
+                    ? error.response.data
+                    : error.response?.data?.message || "Error fetching data";
+            throw new Error(errorMsg.trim());
+        }
+        throw new Error("An unexpected error occurred");
+    }
+}
+
+export const MarkMessage = async ({id, mark}:Mark) => {
+    try {
+        const res = await axios.put(`${BASE_URL}/messages/${id}/mark`, 
+            {mark}
+        )
+
         return res.data
     } catch (error) {
         if (axios.isAxiosError(error)) {
