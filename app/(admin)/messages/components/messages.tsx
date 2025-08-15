@@ -52,9 +52,6 @@ export default function MessagesPage() {
   };
 
   const {mutate:mark} = useMarkMessage({
-    // onSuccess : () =>{
-    //   toast.success("Marked!")
-    // },
     onError: (err) => {
       toast.error(`Error : ${err.message}`)
     }
