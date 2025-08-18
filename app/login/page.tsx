@@ -24,6 +24,7 @@ export default function Login(){
     const router = useRouter();
     const [serverError, setServerError] = useState("");
     const [loading, setIsLoading] = useState(false)
+    const [isDisable, setIsDisable] = useState(false)
     const {
         register,
         handleSubmit,
@@ -34,6 +35,7 @@ export default function Login(){
 
     const onSubmit = async (data : formData) => {
         setIsLoading(true)
+        setIsDisable(true)
         try {
             await AuthLogin(data)
             toast.success("Login success")
@@ -41,6 +43,7 @@ export default function Login(){
         } catch (error : any) {
             toast.error(`Login failed : ${error}`)
             setServerError(error.message)
+            setIsDisable(false)
         } finally{
             setIsLoading(false)
         }   
@@ -72,7 +75,7 @@ export default function Login(){
                             </div>
                         </div>
                         <div className="w-full flex flex-col gap-2">
-                            <Button className="w-full mt-5 cursor-pointer transition duration-300" disabled={loading}>
+                            <Button className="w-full mt-5 cursor-pointer transition duration-300" disabled={isDisable}>
                                 {   loading?
                                     <LoaderCircle className="animate-spin"/>:
                                     "Login"    
