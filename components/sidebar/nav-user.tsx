@@ -1,5 +1,6 @@
 "use client"
 
+import { useLogout } from "@/api/auth"
 import {
   Avatar,
   AvatarFallback,
@@ -33,6 +34,12 @@ export function NavUser({
 }) {
   const { isMobile } = useSidebar()
 
+  // pendingnya manfaatin
+  const {mutate, isPending} = useLogout()
+  const onLogout = () => {
+    mutate()
+  }
+
   return (
     <SidebarMenu>
       <SidebarMenuItem>
@@ -52,7 +59,7 @@ export function NavUser({
                   {user.email}
                 </span>
               </div>
-              <EllipsisVertical  className="ml-auto size-4" />
+              <EllipsisVertical className="ml-auto size-4" />
             </SidebarMenuButton>
           </DropdownMenuTrigger>
           <DropdownMenuContent
@@ -78,13 +85,13 @@ export function NavUser({
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
               <DropdownMenuItem>
-                <CircleUserRound  />
+                <CircleUserRound />
                 Profile
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>
-              <Power  />
+            <DropdownMenuItem onClick={onLogout}>
+              <Power />
               Log out
             </DropdownMenuItem>
           </DropdownMenuContent>

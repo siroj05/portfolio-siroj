@@ -7,16 +7,23 @@ import { Label } from "@/components/ui/label";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod"
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { AuthLogin } from "@/api/auth";
+import { toast } from "sonner";
+import { LoaderCircle } from "lucide-react";
 
 const formSchema = z.object({
-    email : z.email().min(1, "Email required"),
+    name : z.string().min(1, "Name required"),
     password : z.string().min(1, "Password required")
 })
 
 type formData = z.infer<typeof formSchema>
 
 export default function Login(){
-
+    const router = useRouter();
+    const [serverError, setServerError] = useState("");
+    const [loading, setIsLoading] = useState(false)
     const {
         register,
         handleSubmit,
@@ -25,8 +32,18 @@ export default function Login(){
         resolver: zodResolver(formSchema)
     })
 
-    const onSubmit = (data : formData) => {
-        console.log(data)
+    const onSubmit = async (data : formData) => {
+        setIsLoading(true)
+        try {
+            await AuthLogin(data)
+            toast.success("Login success")
+            router.push("/admin")
+        } catch (error : any) {
+            toast.error(`Login failed : ${error}`)
+            setServerError(error.message)
+        } finally{
+            setIsLoading(false)
+        }   
     }
 
     return(
@@ -41,10 +58,10 @@ export default function Login(){
                     <h1 className="text-center font-bold text-3xl mt-3">Login</h1>
                     <form onSubmit={handleSubmit(onSubmit)} className="space-y-3">
                         <div className="space-y-2">
-                            <Label htmlFor="email">Email</Label>
+                            <Label htmlFor="username">Username</Label>
                             <div>
-                                <Input {...register("email")} id="email" type="email" className="dark:bg-black bg-white"/>
-                                <p className="text-red-500 text-sm">{errors.email?.message}</p>    
+                                <Input {...register("name")} id="username" type="username" className="dark:bg-black bg-white"/>
+                                <p className="text-red-500 text-sm">{errors.name?.message}</p>    
                             </div>
                         </div>
                         <div className="space-y-2">
@@ -54,7 +71,17 @@ export default function Login(){
                                 <p className="text-red-500 text-sm">{errors.password?.message}</p>
                             </div>
                         </div>
-                        <Button className="w-full mt-5 cursor-pointer">Login</Button>
+                        <div className="w-full flex flex-col gap-2">
+                            <Button className="w-full mt-5 cursor-pointer transition duration-300" disabled={loading}>
+                                {   loading?
+                                    <LoaderCircle className="animate-spin"/>:
+                                    "Login"    
+                                }
+                            </Button>
+                            <p className="text-xs text-red-500">
+                                {serverError}
+                            </p>
+                        </div>
                     </form>
                 </div>
             </div>

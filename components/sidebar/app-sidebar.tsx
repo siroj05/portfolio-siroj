@@ -45,6 +45,7 @@ const menu = [
 
 export default function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
     const params = usePathname()
+
     return (
         <Sidebar collapsible="offcanvas" {...props}>
             <SidebarHeader>
