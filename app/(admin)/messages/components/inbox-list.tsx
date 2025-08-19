@@ -3,8 +3,6 @@ import { ResponseApi } from "@/api/type";
 import { LoadingDots } from "@/components/loading/loadings";
 import { Separator } from "@/components/ui/separator";
 import { truncateText } from "@/hooks/use-truncate";
-import { LoaderCircleIcon, LucideLoaderCircle } from "lucide-react";
-import Image from "next/image";
 import Link from "next/link";
 
 interface Props {
