@@ -124,7 +124,7 @@ export default function MessagesPage() {
               <Button onClick={() => {
                 setDeleteMode("all");
                 setOpen(true);
-              }} className="cursor-pointer max-[537px]:w-full" variant="destructive">
+              }} disabled={data?.data?.length == 0} className="cursor-pointer max-[537px]:w-full" variant="destructive">
                 <Trash2 /> Delete all messages
               </Button>
             </div>
@@ -141,6 +141,8 @@ export default function MessagesPage() {
             setMobileOpen={setMobileOpen}
             onMark={onMark}
             currentMessage={Number(searchMsg)}
+            isLoading={isLoading}
+            isError={isError}
           />
 
           {/* Read Message */}
