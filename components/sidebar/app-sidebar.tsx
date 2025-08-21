@@ -14,6 +14,8 @@ import Link from "next/link"
 import { NavUser } from "./nav-user"
 import { Separator } from "../ui/separator"
 import { usePathname } from "next/navigation"
+import { Badge } from "../ui/badge"
+import { useGetAllMessages } from "@/api/messages"
 
 const menu = [
     {
@@ -45,6 +47,8 @@ const menu = [
 
 export default function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
     const params = usePathname()
+    const { data, isError, isLoading } = useGetAllMessages()
+    const countUnread = !isError ? data?.data.filter((msg) => msg.isRead == false).length : isLoading ? 0 : data?.data.filter((msg) => msg.isRead == false).length
 
     return (
         <Sidebar collapsible="offcanvas" {...props}>
@@ -65,19 +69,38 @@ export default function AppSidebar({ ...props }: React.ComponentProps<typeof Sid
 
                             {/* menu looping disini */}
                             {
-                                menu.map((item) => (
-                                    <SidebarMenuItem className={`${params.includes(item.url) && "dark:bg-zinc-800 bg-zinc-200 rounded-sm"} `} key={item.menuItem}>
-                                        <SidebarMenuButton asChild>
-                                            <Link href={item.url}>
-                                                <item.icon />
-                                                <span>{item.menuItem}</span>
-                                            </Link>
-                                        </SidebarMenuButton>
-                                    </SidebarMenuItem>
-                                ))
+                                menu.map((item) => {
+                                    if (item.menuItem == "Messages") {
+                                        return (
+                                            <SidebarMenuItem className={`${params.includes(item.url) && "dark:bg-zinc-800 bg-zinc-200 rounded-sm"} `} key={item.menuItem}>
+                                                <SidebarMenuButton asChild>
+                                                    <Link href={item.url} className="relative">
+                                                        <Badge
+                                                            className="absolute right-2 h-5 min-w-5 rounded-full px-1 font-mono tabular-nums"
+                                                            variant="destructive"
+                                                        >
+                                                            {countUnread}
+                                                        </Badge><item.icon />
+                                                        <span>{item.menuItem}</span>
+                                                    </Link>
+                                                </SidebarMenuButton>
+                                            </SidebarMenuItem>
+                                        )
+                                    }
+                                    return (
+                                        <SidebarMenuItem className={`${params.includes(item.url) && "dark:bg-zinc-800 bg-zinc-200 rounded-sm"} `} key={item.menuItem}>
+                                            <SidebarMenuButton asChild>
+                                                <Link href={item.url}>
+                                                    <item.icon />
+                                                    <span>{item.menuItem}</span>
+                                                </Link>
+                                            </SidebarMenuButton>
+                                        </SidebarMenuItem>
+                                    )
+                                })
                             }
 
-                            <Separator className="my-5"/>
+                            <Separator className="my-5" />
 
                             {/* view portfolii */}
                             <SidebarMenuItem>
@@ -97,7 +120,7 @@ export default function AppSidebar({ ...props }: React.ComponentProps<typeof Sid
                     name: "Siroojuddin Apendi",
                     email: "rojudin123@gmail.com",
                     avatar: "/siroj.png",
-                }}/>
+                }} />
             </SidebarFooter>
         </Sidebar>
     )

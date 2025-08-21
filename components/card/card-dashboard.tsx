@@ -8,7 +8,7 @@ interface Props {
     desc: string
     link: string
     labelBtn: string
-    total: string
+    total: number
     icon: ReactNode
 }
 
