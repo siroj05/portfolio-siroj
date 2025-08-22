@@ -1,4 +1,5 @@
 "use client"
+import { useCreateExperience } from "@/api/experiences";
 import { DatePicker } from "@/components/date-picker";
 import { FormLayout } from "@/components/layout/form-layout";
 import { Button } from "@/components/ui/button";
@@ -6,6 +7,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import MinimalTiptapEditor from "@/components/ui/minimal-tiptap/minimal-tiptap";
+import { formatDate } from "@/lib/format-date";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod"
@@ -16,13 +18,22 @@ const formSchema = z.object({
     startFrom : z.date().min(1, "Start From is required"),
     to : z.date().optional(),
     present : z.boolean(),
-    descriptionJob : z.string().optional()
+    description : z.string().optional()
 }).superRefine((data, ctx) =>{
     if(!data.present && !data.to){
         ctx.addIssue({
             path : ["to"],
             code : z.ZodIssueCode.custom,
             message : "To is required"
+        })
+    }
+
+    // validasi range date
+    if(data.to && data.startFrom > data.to){
+        ctx.addIssue({
+            path : ["to"],
+            code : z.ZodIssueCode.custom,
+            message : "To date cannot be earlier than start from"
         })
     }
 })
@@ -42,13 +53,17 @@ export default function AddExperience() {
         defaultValues : {
             present : false
         }
-    })    
-    const desc = watch("descriptionJob")
+    })
+
+    const desc = watch("description")
     const startFrom = watch("startFrom")
     const to = watch("to")
     const present = watch("present")
+
+    const { mutate, isPending } = useCreateExperience()
+
     const onSubmit = (data : FormData) => {
-        console.log(data)
+        mutate(data)
     }
 
     return (
@@ -113,7 +128,7 @@ export default function AddExperience() {
                 */}
                 <MinimalTiptapEditor
                     value={desc}
-                    onChange={(value) => setValue("descriptionJob", JSON.stringify(value))}
+                    onChange={(value) => setValue("description", JSON.stringify(value))}
                     className="w-full"
                     editorContentClassName="p-5"
                     output="html"
