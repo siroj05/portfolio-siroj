@@ -1,5 +1,6 @@
 "use client"
 
+import { useGetAllExperiences } from "@/api/experiences";
 import { EXPERIENCE } from "@/components/section/experience-section";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
@@ -7,6 +8,11 @@ import { Briefcase, Plus, SquarePen } from "lucide-react";
 import Link from "next/link";
 
 export default function Experiences() {
+
+    const { data, isLoading, isError, isSuccess } = useGetAllExperiences()
+
+    console.log(data)
+
     return (
         <div className="bg-card border rounded-lg">
             <div className="sticky top-11 z-40 bg-card">

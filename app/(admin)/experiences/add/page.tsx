@@ -8,6 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import MinimalTiptapEditor from "@/components/ui/minimal-tiptap/minimal-tiptap";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { LoaderCircle } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { z } from "zod"
 
@@ -59,7 +60,7 @@ export default function AddExperience() {
     const to = watch("to")
     const present = watch("present")
 
-    const { mutate, isPending } = useCreateExperience()
+    const { mutate, isPending, isSuccess } = useCreateExperience()
 
     const onSubmit = (data : FormData) => {
         mutate(data)
@@ -82,7 +83,7 @@ export default function AddExperience() {
                         <p className="text-sm text-red-500 font-light">{errors.office?.message}</p>
                     </div>
                 </div>
-                <div className="flex gap-5">
+                <div className="flex gap-5 max-sm:flex-col">
                     <div className="flex flex-col space-y-2">
                         <Label>Start From</Label>
                         <div>
@@ -137,7 +138,14 @@ export default function AddExperience() {
                     editorClassName="focus:outline-hidden"
                 />
                 <div className="flex justify-end">
-                    <Button>Save</Button>
+                    <Button className="cursor-pointer" disabled={isPending || isSuccess}>
+                        {
+                            isPending || isSuccess ?
+                                <LoaderCircle className="animate-spin"/> 
+                            :
+                                "Save"
+                        }
+                    </Button>
                 </div>
             </form>
         </FormLayout>
