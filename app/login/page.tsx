@@ -41,8 +41,9 @@ export default function Login(){
             toast.success("Login success")
             router.push("/admin")
         } catch (error : any) {
-            toast.error(`Login failed : ${error}`)
-            setServerError(error.message)
+            const msg = JSON.parse(error.message)
+            // toast.error(`Login failed : ${error}`)
+            setServerError(msg.messages)
             setIsDisable(false)
         } finally{
             setIsLoading(false)
@@ -81,7 +82,7 @@ export default function Login(){
                                     "Login"    
                                 }
                             </Button>
-                            <p className="text-xs text-red-500">
+                            <p className="text-xs text-red-500 text-center">
                                 {serverError}
                             </p>
                         </div>
