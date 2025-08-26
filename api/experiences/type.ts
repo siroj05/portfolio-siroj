@@ -1,5 +1,5 @@
 export type Experiences = {
-    id : string
+    id? : string
     position : string
     office : string
     start : Date

@@ -67,12 +67,14 @@ export default function ListExperiences({
                                             - ini nanti Link direct ke page edit
                                         */}
                                         <div className="flex gap-1">
-                                            <Button className="flex hover:bg-zinc-300 p-1 hover:dark:text-slate-700 hover:shadow-white rounded-sm cursor-pointer">
-                                                <SquarePen />
+                                            <Button asChild className="flex hover:bg-zinc-300 p-1 hover:dark:text-slate-700 hover:shadow-white rounded-sm cursor-pointer">
+                                                <Link href={`experiences/edit/${exp.id}`}>
+                                                    <SquarePen />
+                                                </Link>
                                             </Button>
                                             <Button onClick={() => {
                                                 setOpen(true)
-                                                setGetId(exp.id)
+                                                setGetId(exp?.id??"")
                                             }} variant="destructive" size="icon" className="flex p-1 hover:shadow-red-400/80 rounded-sm cursor-pointer">
                                                 <Trash />
                                             </Button>

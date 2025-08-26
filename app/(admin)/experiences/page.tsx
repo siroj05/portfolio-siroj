@@ -2,10 +2,7 @@
 
 import { useDeleteExperience, useGetAllExperiences } from "@/api/experiences";
 import { Button } from "@/components/ui/button";
-import { Separator } from "@/components/ui/separator";
-import { formatDateName } from "@/lib/format-date";
-import { Briefcase, LoaderCircle, Plus, SquarePen, Trash } from "lucide-react";
-import Link from "next/link";
+import { LoaderCircle } from "lucide-react";
 import ListExperiences from "./components/list-experiences";
 import { AlertDialogDelete } from "@/components/dialog/alert-dialog";
 import { useState } from "react";
