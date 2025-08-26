@@ -14,7 +14,7 @@ export default function Experiences() {
     const [getId, setGetId] = useState("")
     
     // get all data
-    const { data: experiences, isLoading, isError, isSuccess } = useGetAllExperiences()
+    const { data: experiences, isLoading, isError, isSuccess } = useGetAllExperiences(true)
 
     // delete data
     const { mutate, isPending } = useDeleteExperience({

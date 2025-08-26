@@ -28,7 +28,6 @@ export const CreateExperience = async ({
 
         return res.data
     } catch (error) {
-        console.log(error)
         if (axios.isAxiosError(error)) {
             const errorMsg =
                 typeof error.response?.data === "string"
@@ -43,6 +42,24 @@ export const CreateExperience = async ({
 export const GetAllExperiences = async <T = Experiences[]>(): Promise<ResponseApi<T>> => {
     try {
         const res = await axios.get(`${BASE_URL}/experiences`, {
+            withCredentials: true
+        })
+        return res.data
+    } catch (error) {
+        if (axios.isAxiosError(error)) {
+            const errorMsg =
+                typeof error.response?.data === "string"
+                    ? error.response.data
+                    : error.response?.data?.message || "Error fetching data";
+            throw new Error(errorMsg.trim());
+        }
+        throw new Error("An unexpected error occurred");
+    }
+}
+
+export const GetExperienceById = async <T = Experiences>(id : string):Promise<ResponseApi<T>> => {
+    try {
+        const res = await axios.get(`${BASE_URL}/experiences/${id}`, {
             withCredentials: true
         })
         return res.data

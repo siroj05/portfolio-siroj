@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
-import { CreateExperience, DeleteExperience, GetAllExperiences } from "./experiences.api"
+import { CreateExperience, DeleteExperience, GetAllExperiences, GetExperienceById } from "./experiences.api"
 import { toast } from "sonner"
 import { useRouter } from "next/navigation"
 import { ResponseApi } from "../type"
@@ -21,10 +21,11 @@ export const useCreateExperience = () => {
     })
 }
 
-export const useGetAllExperiences = () => {
+export const useGetAllExperiences = (enabled = false) => {
     return useQuery<ResponseApi<Experiences[]>>({
         queryKey : ["experiences"],
-        queryFn : GetAllExperiences
+        queryFn : GetAllExperiences,
+        enabled
     })
 }
 
@@ -42,5 +43,12 @@ export const useDeleteExperience = (
             options?.onSuccess?.()
         },
         onError : options?.onError
+    })
+}
+
+export const useGetExperienceById = (id : string) => {
+    return useQuery<ResponseApi<Experiences>>({
+        queryKey : ["experiences",id],
+        queryFn : () => GetExperienceById(id)
     })
 }
