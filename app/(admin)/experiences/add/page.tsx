@@ -15,12 +15,12 @@ import { z } from "zod"
 const formSchema = z.object({
     position : z.string().min(1, "Position is required"),
     office : z.string().min(1, "Office is required"),
-    startFrom : z.date().min(1, "Start From is required"),
-    to : z.date().optional(),
+    start : z.date().min(1, "Start From is required"),
+    end : z.date().optional(),
     present : z.boolean(),
     description : z.string().optional()
 }).superRefine((data, ctx) =>{
-    if(!data.present && !data.to){
+    if(!data.present && !data.end){
         ctx.addIssue({
             path : ["to"],
             code : z.ZodIssueCode.custom,
@@ -29,7 +29,7 @@ const formSchema = z.object({
     }
 
     // validasi range date
-    if(data.to && data.startFrom > data.to){
+    if(data.end && data.start > data.end){
         ctx.addIssue({
             path : ["to"],
             code : z.ZodIssueCode.custom,
@@ -56,8 +56,8 @@ export default function AddExperience() {
     })
 
     const desc = watch("description")
-    const startFrom = watch("startFrom")
-    const to = watch("to")
+    const startFrom = watch("start")
+    const to = watch("end")
     const present = watch("present")
 
     const { mutate, isPending, isSuccess } = useCreateExperience()
@@ -90,13 +90,13 @@ export default function AddExperience() {
                             <DatePicker
                                 setValue={setValue}
                                 value={startFrom}
-                                state="startFrom"
+                                state="start"
                             />
                             {/* 
                                 @Note
                                 - Kena invalid input
                             */}
-                            <p className="text-sm text-red-500 font-light">{errors.startFrom?.message}</p>
+                            <p className="text-sm text-red-500 font-light">{errors.start?.message}</p>
                         </div>
                     </div>
                     <div className="flex flex-col space-y-2">
@@ -105,10 +105,10 @@ export default function AddExperience() {
                             <DatePicker
                                 setValue={setValue}
                                 value={to}
-                                state="to"
+                                state="end"
                                 readonly={present}
                             />
-                            <p className="text-sm text-red-500 font-light">{errors.to?.message}</p>
+                            <p className="text-sm text-red-500 font-light">{errors.end?.message}</p>
                         </div>
                     </div>
                     <div className="flex items-center gap-2">
@@ -116,7 +116,7 @@ export default function AddExperience() {
                             checked={present}
                             onCheckedChange={(checked) => {
                                 setValue("present", Boolean(checked))
-                                setValue("to", undefined)
+                                setValue("end", undefined)
                             }}
                         />
                         <Label htmlFor="present">Present</Label>

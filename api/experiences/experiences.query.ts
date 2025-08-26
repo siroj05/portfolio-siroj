@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
-import { CreateExperience, GetAllExperiences } from "./experiences.api"
+import { CreateExperience, DeleteExperience, GetAllExperiences } from "./experiences.api"
 import { toast } from "sonner"
 import { useRouter } from "next/navigation"
 import { ResponseApi } from "../type"
@@ -25,5 +25,22 @@ export const useGetAllExperiences = () => {
     return useQuery<ResponseApi<Experiences[]>>({
         queryKey : ["experiences"],
         queryFn : GetAllExperiences
+    })
+}
+
+export const useDeleteExperience = (
+    options? : {
+        onSuccess? : () => void
+        onError? : (err : any) => void
+    }
+) => {
+    const queryClient = useQueryClient()
+    return useMutation({
+        mutationFn : DeleteExperience,
+        onSuccess : () => {
+            queryClient.invalidateQueries({queryKey : ["experiences"]})
+            options?.onSuccess?.()
+        },
+        onError : options?.onError
     })
 }

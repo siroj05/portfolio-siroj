@@ -1,7 +1,8 @@
 export type Experiences = {
+    id : string
     position : string
     office : string
-    startFrom : Date
-    to? : Date
+    start : Date
+    end? : Date
     description? : string
 }
