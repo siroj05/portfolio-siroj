@@ -2,10 +2,11 @@ import { z } from "zod";
 
 export const formSchema = z
   .object({
+    id : z.string().optional(),
     position: z.string().min(1, "Position is required"),
     office: z.string().min(1, "Office is required"),
-    start: z.date().min(1, "Start From is required"),
-    end: z.date().optional(),
+    start: z.string().min(1, "Start From is required"),
+    end: z.string().optional(),
     present: z.boolean(),
     description: z.string().optional(),
   })

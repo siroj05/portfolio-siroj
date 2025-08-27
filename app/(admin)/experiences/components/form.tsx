@@ -50,10 +50,11 @@ export default function FormExperience({
   useEffect(() => {
     if (experience?.data) {
       reset({
+        id : experience.data.id,
         position: experience.data.position,
         office: experience.data.office,
-        start: new Date(experience.data.start),
-        end: experience.data.end ? new Date(experience.data.end) : undefined,
+        start: experience.data.start,
+        end: experience.data.end,
         description: experience.data.description,
       });
     }

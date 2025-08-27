@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
-import { CreateExperience, DeleteExperience, GetAllExperiences, GetExperienceById } from "./experiences.api"
+import { CreateExperience, DeleteExperience, GetAllExperiences, GetExperienceById, UpdateExperience } from "./experiences.api"
 import { toast } from "sonner"
 import { useRouter } from "next/navigation"
 import { ResponseApi } from "../type"
@@ -50,5 +50,21 @@ export const useGetExperienceById = (id : string) => {
     return useQuery<ResponseApi<Experiences>>({
         queryKey : ["experiences",id],
         queryFn : () => GetExperienceById(id)
+    })
+}
+
+export const useUpdateExperience = () => {
+    const queryClient = useQueryClient()
+    const router = useRouter()
+    return useMutation({
+        mutationFn : UpdateExperience,
+        onSuccess : () => {
+            queryClient.invalidateQueries({queryKey: ["experiences"]})
+            toast.success("Success to update experience")
+            router.push("/experiences")
+        },
+        onError : (err) => {
+            toast.success(`Failed to create experience : ${err.message}`)
+        }
     })
 }

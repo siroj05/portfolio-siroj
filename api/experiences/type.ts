@@ -2,7 +2,7 @@ export type Experiences = {
     id? : string
     position : string
     office : string
-    start : Date
-    end? : Date
+    start : string
+    end? : string
     description? : string
 }

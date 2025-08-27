@@ -13,14 +13,20 @@ export const CreateExperience = async ({
     end,
     description
 }: Experiences) => {
-
+    console.log({
+                // office,
+                // position,
+                start: start,
+                end: end,
+                // description
+            })
     try {
         const res = await axios.post(`${BASE_URL}/experiences/save`,
             {
                 office,
                 position,
-                start: formatDate(start?.toString()),
-                end: formatDate(end?.toString()),
+                start: start,
+                end: end? end : null,
                 description
             },
             { withCredentials: true }
@@ -57,7 +63,7 @@ export const GetAllExperiences = async <T = Experiences[]>(): Promise<ResponseAp
     }
 }
 
-export const GetExperienceById = async <T = Experiences>(id : string):Promise<ResponseApi<T>> => {
+export const GetExperienceById = async <T = Experiences>(id: string): Promise<ResponseApi<T>> => {
     try {
         const res = await axios.get(`${BASE_URL}/experiences/${id}`, {
             withCredentials: true
@@ -75,10 +81,10 @@ export const GetExperienceById = async <T = Experiences>(id : string):Promise<Re
     }
 }
 
-export const DeleteExperience = async (id : string) => {
+export const DeleteExperience = async (id: string) => {
     try {
         const res = await axios.delete(`${BASE_URL}/experiences/${id}`,
-            {withCredentials : true}
+            { withCredentials: true }
         )
         return res.data
     } catch (error) {
@@ -89,6 +95,45 @@ export const DeleteExperience = async (id : string) => {
                     : error.response?.data?.message || "Error fetching data";
             throw new Error(errorMsg.trim());
         }
-        throw new Error("An unexpected error occurred");    
+        throw new Error("An unexpected error occurred");
+    }
+}
+
+export const UpdateExperience = async ({ id, position,
+    office,
+    start,
+    end,
+    description
+}: Experiences) => {
+    console.log( {
+                id,
+                office,
+                position,
+                start: formatDate(start?.toString()),
+                end: formatDate(end?.toString()),
+                description
+            })
+    try {
+        const res = await axios.put(`${BASE_URL}/experiences/update`,
+            {
+                id,
+                office,
+                position,
+                start: formatDate(start?.toString()),
+                end: formatDate(end?.toString()),
+                description
+            },
+            { withCredentials: true }
+        )
+        return res.data
+    } catch (error) {
+        if (axios.isAxiosError(error)) {
+            const errorMsg =
+                typeof error.response?.data === "string"
+                    ? error.response.data
+                    : error.response?.data?.message || "Error fetching data";
+            throw new Error(errorMsg.trim());
+        }
+        throw new Error("An unexpected error occurred");
     }
 }

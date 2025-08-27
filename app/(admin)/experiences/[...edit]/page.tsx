@@ -1,6 +1,6 @@
 "use client"
 
-import { useGetExperienceById } from "@/api/experiences"
+import { useGetExperienceById, useUpdateExperience } from "@/api/experiences"
 import { useParams } from "next/navigation"
 import FormExperience from "../components/form"
 import { FormData } from "../components/validation"
@@ -10,10 +10,12 @@ export default function ExperienceDetail(){
     const id = params?.edit?.[1]
 
     const { data , isLoading, isError, isSuccess, error } = useGetExperienceById(id!)
+    const { mutate, isPending } = useUpdateExperience()
    
     const onSubmit = (data : FormData) => {
-            // mutate(data)
+        console.log(data)
+        mutate(data)
     }
-
-    return <FormExperience onSubmit={onSubmit} isPending={isLoading} isSuccess={isSuccess} experience={data} />
+    
+    return <FormExperience onSubmit={onSubmit} isPending={isLoading || isPending} isSuccess={isLoading} experience={data} />
 }
