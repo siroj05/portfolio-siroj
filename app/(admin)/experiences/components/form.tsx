@@ -55,11 +55,13 @@ export default function FormExperience({
         office: experience.data.office,
         start: experience.data.start,
         end: experience.data.end,
-        description: experience.data.description,
+        description: experience.data.description 
+        ? experience.data.description 
+        : JSON.stringify(null),
       });
     }
-  }, [experience, reset]);
-
+  }, [experience?.data, reset]);
+  
   return (
     <FormLayout>
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-3">

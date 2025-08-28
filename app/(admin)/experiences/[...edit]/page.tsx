@@ -4,6 +4,8 @@ import { useGetExperienceById, useUpdateExperience } from "@/api/experiences"
 import { useParams } from "next/navigation"
 import FormExperience from "../components/form"
 import { FormData } from "../components/validation"
+import LoadingSkeleton from "./loading"
+import IsErrorFetch from "./isError"
 
 export default function ExperienceDetail(){
     const params = useParams()
@@ -13,9 +15,10 @@ export default function ExperienceDetail(){
     const { mutate, isPending } = useUpdateExperience()
    
     const onSubmit = (data : FormData) => {
-        console.log(data)
         mutate(data)
     }
-    
-    return <FormExperience onSubmit={onSubmit} isPending={isLoading || isPending} isSuccess={isLoading} experience={data} />
+
+    if (isLoading) return <LoadingSkeleton/>
+    if (isSuccess) return <FormExperience onSubmit={onSubmit} isPending={isLoading || isPending} isSuccess={isLoading} experience={data} />
+    if (isError) return <IsErrorFetch message={error}/>
 }

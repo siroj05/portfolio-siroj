@@ -49,7 +49,8 @@ export const useDeleteExperience = (
 export const useGetExperienceById = (id : string) => {
     return useQuery<ResponseApi<Experiences>>({
         queryKey : ["experiences",id],
-        queryFn : () => GetExperienceById(id)
+        queryFn : () => GetExperienceById(id),
+        refetchOnWindowFocus : false
     })
 }
 

@@ -28,7 +28,6 @@ export function DatePicker({
   readonly = false
 }: DateProps) {
   const [open, setOpen] = React.useState(false)
-
   return (
     <div className="flex flex-col gap-3">
       <Popover open={open} onOpenChange={setOpen}>
@@ -50,8 +49,8 @@ export function DatePicker({
             captionLayout="dropdown"
             onSelect={(date) => {
               if (date) {
+                console.log(date)
                 const formatted = format(date, "yyyy-MM-dd") // simpan sebagai string
-                console.log(formatted)
                 setValue(state, formatted)
                 setOpen(false)
               }
