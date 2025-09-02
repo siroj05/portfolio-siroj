@@ -58,6 +58,7 @@ export default function FormExperience({
         description: experience.data.description 
         ? experience.data.description 
         : JSON.stringify(null),
+        present : experience.data.present
       });
     }
   }, [experience?.data, reset]);

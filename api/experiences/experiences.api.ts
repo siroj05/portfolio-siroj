@@ -11,9 +11,17 @@ export const CreateExperience = async ({
     office,
     start,
     end,
-    description
+    description,
+    present
 }: Experiences) => {
-    
+    console.log({
+                office,
+                position,
+                start: start,
+                end: end ? end : null,
+                description,
+                present
+            },)
     try {
         const res = await axios.post(`${BASE_URL}/experiences/save`,
             {
@@ -21,7 +29,8 @@ export const CreateExperience = async ({
                 position,
                 start: start,
                 end: end ? end : null,
-                description
+                description,
+                present
             },
             { withCredentials: true }
         )

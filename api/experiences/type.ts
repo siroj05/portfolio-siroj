@@ -5,4 +5,5 @@ export type Experiences = {
     start : string
     end? : string
     description? : string
+    present : boolean
 }
