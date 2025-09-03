@@ -49,7 +49,6 @@ export function DatePicker({
             captionLayout="dropdown"
             onSelect={(date) => {
               if (date) {
-                console.log(date)
                 const formatted = format(date, "yyyy-MM-dd") // simpan sebagai string
                 setValue(state, formatted)
                 setOpen(false)

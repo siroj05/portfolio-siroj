@@ -8,7 +8,6 @@ export default function AddExperience() {
     const { mutate, isPending, isSuccess } = useCreateExperience()
 
     const onSubmit = (data : FormData) => {
-        console.log(data)
         mutate(data)
     }
     
