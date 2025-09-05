@@ -84,7 +84,7 @@ export default function ListExperiences({
                             )
                         }):
                         <div className="flex items-center justify-center py-4">
-                            <p className="text-sm text-gray-500">No projects found</p>
+                            <p className="text-center">No Experience Found</p>
                         </div>
                     : isError &&
                         <div className="flex items-center justify-center py-4">
