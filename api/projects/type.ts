@@ -6,4 +6,5 @@ export type Projects = {
     techStack : string
     demoUrl? : string
     githubUrl? : string
+    FilePath? : string
 }

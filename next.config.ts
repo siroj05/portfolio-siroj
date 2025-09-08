@@ -10,6 +10,9 @@ const nextConfig: NextConfig = {
     // !! WARN !!
     ignoreBuildErrors: true,
   },
+  images : {
+    domains : ["localhost"]
+  },
   eslint: {
     ignoreDuringBuilds: true,
   },

@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
-import { CreateProject, GetAllProjects } from "./projects.api"
+import { CreateProject, DeleteProject, GetAllProjects } from "./projects.api"
 import { toast } from "sonner"
 import { useRouter } from "next/navigation"
 import { ResponseApi } from "../type"
@@ -24,7 +24,22 @@ export const useCreateProject = () => {
 
 export const useGetAllProjects = () => {
   return useQuery<ResponseApi<Projects[]>>({
-    queryKey : ["projects"],
-    queryFn : GetAllProjects
+    queryKey: ["projects"],
+    queryFn: GetAllProjects
+  })
+}
+
+export const useDeleteProject = (options?: {
+  onSuccess?: () => void
+  onError?: (err: any) => void
+}) => {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: DeleteProject,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["projects"] })
+      options?.onSuccess?.()
+    },
+    onError: options?.onError
   })
 }
