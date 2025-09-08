@@ -1,6 +1,6 @@
 export type Projects = {
     id? : string
-    image : any
+    image? : any
     title : string
     description : string
     techStack : string

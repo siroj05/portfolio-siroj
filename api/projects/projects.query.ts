@@ -1,20 +1,30 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query"
-import { CreateProject } from "./projects.api"
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
+import { CreateProject, GetAllProjects } from "./projects.api"
+import { toast } from "sonner"
+import { useRouter } from "next/navigation"
+import { ResponseApi } from "../type"
+import { Projects } from "./type"
 
 // create project
-export const useCreateProject = (
-    options? : {
-      onSuccess? : () => void
-      onError? : (err : any) => void
+export const useCreateProject = () => {
+  const queryClient = useQueryClient()
+  const router = useRouter()
+  return useMutation({
+    mutationFn: CreateProject,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["projects"] })
+      toast.success("Success to create project")
+      router.push("/projects")
+    },
+    onError: (err) => {
+      toast.success(`Failed to create project : ${err.message}`)
     }
-) => {
-    const queryClient = useQueryClient()
-    return useMutation({
-      mutationFn : CreateProject,
-      onSuccess : () => {
-        queryClient.invalidateQueries({queryKey : ["projects"]})
-        options?.onSuccess?.()
-      },
-      onError: options?.onError
-    })
+  })
+}
+
+export const useGetAllProjects = () => {
+  return useQuery<ResponseApi<Projects[]>>({
+    queryKey : ["projects"],
+    queryFn : GetAllProjects
+  })
 }

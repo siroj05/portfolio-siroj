@@ -7,6 +7,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { formSchema, FormData } from "../components/validation";
+import { useCreateProject } from "@/api/projects";
 
 export default function AddProjects() {
 
@@ -18,9 +19,11 @@ export default function AddProjects() {
         resolver: zodResolver(formSchema)
     })
 
+    const { mutate, isPending, isSuccess } = useCreateProject()
+
     // @note hit api save difungsi ini
     const onSubmit = (data: FormData) => {
-        console.log(data)
+        mutate(data)
     }
 
     return (
