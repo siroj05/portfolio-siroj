@@ -1,23 +1,10 @@
 "use client"
-import { FormLayout } from "@/components/layout/form-layout";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import { formSchema, FormData } from "../components/validation";
+
+import { FormData } from "../components/validation";
 import { useCreateProject } from "@/api/projects";
+import FormProject from "../components/form";
 
 export default function AddProjects() {
-
-    const {
-        register,
-        handleSubmit,
-        formState: { errors }
-    } = useForm<FormData>({
-        resolver: zodResolver(formSchema)
-    })
 
     const { mutate, isPending, isSuccess } = useCreateProject()
 
@@ -27,49 +14,6 @@ export default function AddProjects() {
     }
 
     return (
-        <FormLayout>
-            <form onSubmit={handleSubmit(onSubmit)} className="space-y-3">
-                <div className="space-y-2">
-                    <Label htmlFor="file" >Picture</Label>
-                    <div>
-                        <Input {...register("image")} className="w-[300px]" id="file" type="file" accept="image/*" />
-                        <p className="text-sm text-red-500 font-light">{errors.image?.message as string}</p>
-                    </div>
-                </div>
-                <div className="space-y-2">
-                    <Label htmlFor="title" >Title</Label>
-                    <div>
-                        <Input {...register("title")} id="title" type="text" placeholder="Title.." />
-                        <p className="text-sm text-red-500 font-light">{errors.title?.message}</p>
-                    </div>
-                </div>
-                <div className="space-y-2">
-                    <Label htmlFor="description" >Description</Label>
-                    <div>
-                        <Textarea {...register("description")} id="description" placeholder="Description.." />
-                        <p className="text-sm text-red-500 font-light">{errors.description?.message}</p>
-                    </div>
-                </div>
-                <div className="space-y-2">
-                    <Label htmlFor="stack" >Tech Stack</Label>
-                    <div>
-                        <Input {...register("techStack")} id="stack" type="text" placeholder="React, Tailwind, Zustand.." />
-                        <p className="text-sm text-red-500 font-light">{errors.techStack?.message}</p>
-                    </div>
-                </div>
-                <div className="space-y-2">
-                    <Label htmlFor="demo" >Demo Url</Label>
-                    <Input {...register("demoUrl")} id="demo" type="text" placeholder="Demo url.." />
-                </div>
-                <div className="space-y-2">
-                    <Label htmlFor="git" >Github Url</Label>
-                    <Input {...register("githubUrl")} id="git" type="text" placeholder="Github url.." />
-                </div>
-
-                <div className="flex justify-end">
-                    <Button>Save</Button>
-                </div>
-            </form>
-        </FormLayout>
+       <FormProject onSubmit={onSubmit} isPending={isPending} isSuccess={isSuccess} />
     )
 }

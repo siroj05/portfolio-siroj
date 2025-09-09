@@ -5,7 +5,7 @@ import { useParams } from "next/navigation"
 import FormExperience from "../components/form"
 import { FormData } from "../components/validation"
 import LoadingSkeleton from "./loading"
-import IsErrorFetch from "./isError"
+import IsErrorFetch from "../../../../components/isError"
 
 export default function ExperienceDetail(){
     const params = useParams()

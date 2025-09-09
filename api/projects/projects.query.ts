@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
-import { CreateProject, DeleteProject, GetAllProjects } from "./projects.api"
+import { CreateProject, DeleteProject, GetAllProjects, GetProjectById } from "./projects.api"
 import { toast } from "sonner"
 import { useRouter } from "next/navigation"
 import { ResponseApi } from "../type"
@@ -41,5 +41,12 @@ export const useDeleteProject = (options?: {
       options?.onSuccess?.()
     },
     onError: options?.onError
+  })
+}
+
+export const useGetProjectById = (id : string) => {
+  return useQuery<ResponseApi<Projects>>({
+    queryKey : ["projects", id],
+    queryFn : () => GetProjectById(id)
   })
 }

@@ -79,3 +79,19 @@ export const DeleteProject = async (id : string) => {
     throw new Error("An unexpected error occurred");
   }
 }
+
+export const GetProjectById = async <T = Projects>(id : string): Promise<ResponseApi<T>> => {
+  try {
+    const res = await axios.get(`${BASE_URL}/projects/${id}`, {withCredentials : true})
+    return res.data
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      const errorMsg =
+        typeof error.response?.data === "string"
+          ? error.response.data
+          : error.response?.data?.message || "Error get data";
+      throw new Error(errorMsg.trim());
+    }
+    throw new Error("An unexpected error occurred");
+  }
+}

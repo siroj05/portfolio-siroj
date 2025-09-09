@@ -1,6 +1,5 @@
 "use client"
 
-import { PROJECTS } from "@/components/section/project-section"
 import { Button } from "@/components/ui/button"
 import { Separator } from "@/components/ui/separator"
 import { ExternalLink, Github, LoaderCircle, Plus } from "lucide-react"
