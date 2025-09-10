@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
-import { CreateProject, DeleteProject, GetAllProjects, GetProjectById } from "./projects.api"
+import { CreateProject, DeleteProject, GetAllProjects, GetProjectById, UpdateProject } from "./projects.api"
 import { toast } from "sonner"
 import { useRouter } from "next/navigation"
 import { ResponseApi } from "../type"
@@ -47,6 +47,22 @@ export const useDeleteProject = (options?: {
 export const useGetProjectById = (id : string) => {
   return useQuery<ResponseApi<Projects>>({
     queryKey : ["projects", id],
-    queryFn : () => GetProjectById(id)
+    queryFn : () => GetProjectById(id),
+  })
+}
+
+export const useUpdateProject = () => {
+  const queryClient = useQueryClient()
+  const router = useRouter()
+  return useMutation({
+    mutationFn : UpdateProject,
+    onSuccess : () => {
+      queryClient.invalidateQueries({queryKey : ["projects"]})
+      toast.success("Updating successfully")
+      router.push("/projects")
+    },
+    onError : (err) => {
+      toast.error(`Failed to update project : ${err.message}`)
+    }
   })
 }

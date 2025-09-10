@@ -13,6 +13,7 @@ import { useState } from "react"
 import { AlertDialogDelete } from "@/components/dialog/alert-dialog"
 import { LoadingDots } from "@/components/loading/loadings"
 import { toast } from "sonner"
+import { Tooltips } from "@/components/tooltips"
 
 export default function Projects() {
 
@@ -99,7 +100,19 @@ export default function Projects() {
                             <h1 className="font-semibold text-sm">{project.title}</h1>
 
                             {/* description */}
-                            <p className="text-[12px]">{project.description}</p>
+                            {
+                              project.description.length > 50 ?
+                              <Tooltips
+                                trigger={
+                                  <p className="text-[12px]">{project.description.substring(0, 50)}...</p>
+                                }
+                                content={
+                                  <p className="text-[12px]">{project.description}</p>
+                                }
+                              />
+                              :
+                              <p className="text-[12px]">{project.description}</p>
+                            }
 
                             {/* technologies */}
                             <div className="space-x-1">

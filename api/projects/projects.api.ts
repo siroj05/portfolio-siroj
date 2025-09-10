@@ -95,3 +95,46 @@ export const GetProjectById = async <T = Projects>(id : string): Promise<Respons
     throw new Error("An unexpected error occurred");
   }
 }
+
+export const UpdateProject = async ({
+  id,
+  image,
+  title,
+  description,
+  techStack,
+  demoUrl,
+  githubUrl,
+}:Projects) => {
+  const formData = new FormData()
+  if (image && image[0]){
+    formData.append("image", image[0])
+  }
+  formData.append("id", id!)
+  formData.append("title", title)
+  formData.append("description", description)
+  formData.append("techStack", techStack)
+  if(demoUrl) formData.append("demoUrl", demoUrl)
+  if(githubUrl) formData.append("githubUrl", githubUrl)
+
+  try {
+    const res = await axios.put(`${BASE_URL}/projects/update`,
+      formData,
+      {
+        withCredentials : true,
+        headers : {
+          "Content-Type" : "multipart/form-data"
+        }
+      }
+    )
+    return res.data
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      const errorMsg =
+        typeof error.response?.data === "string"
+          ? error.response.data
+          : error.response?.data?.message || "Error updating Project";
+      throw new Error(errorMsg.trim());
+    }
+    throw new Error("An unexpected error occurred");
+  }
+}
