@@ -20,14 +20,14 @@ export default function Projects() {
   const { data: projects, isLoading, isError, isSuccess } = useGetAllProjects()
   const [open, setOpen] = useState(false)
   const [getId, setGetId] = useState("")
-  
+
   // delete
-  const {mutate, isPending} = useDeleteProject({
-    onSuccess : () => {
+  const { mutate, isPending } = useDeleteProject({
+    onSuccess: () => {
       setOpen(false)
       toast.success("Delete Successfully")
     },
-    onError : (err) => {
+    onError: (err) => {
       toast.error(`Error delete : ${err}`)
     }
   })
@@ -65,7 +65,7 @@ export default function Projects() {
                       return (
                         <div
                           key={project.title}
-                          className="border dark:bg-zinc-800 bg-zinc-100  w-[230px] max-[1240px]:w-full rounded-xl"
+                          className="border dark:bg-zinc-800 bg-zinc-100 w-[230px] max-[1240px]:w-full rounded-xl flex flex-col"
                         >
                           <div className="relative">
                             <Image
@@ -95,23 +95,23 @@ export default function Projects() {
                               />
                             </div>
                           </div>
-                          <div className="p-3 space-y-1">
+                          <div className="p-3 flex flex-col justify-between flex-grow gap-2">
                             {/* title */}
                             <h1 className="font-semibold text-sm">{project.title}</h1>
 
                             {/* description */}
                             {
-                              project.description.length > 50 ?
-                              <Tooltips
-                                trigger={
-                                  <p className="text-[12px]">{project.description.substring(0, 50)}...</p>
-                                }
-                                content={
-                                  <p className="text-[12px]">{project.description}</p>
-                                }
-                              />
-                              :
-                              <p className="text-[12px]">{project.description}</p>
+                              project.description.length > 60 ?
+                                <Tooltips
+                                  trigger={
+                                    <p className="text-[12px]">{project.description.substring(0, 60)}...</p>
+                                  }
+                                  content={
+                                    <p className="text-[12px]">{project.description}</p>
+                                  }
+                                />
+                                :
+                                <p className="text-[12px]">{project.description}</p>
                             }
 
                             {/* technologies */}

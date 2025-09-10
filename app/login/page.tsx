@@ -77,7 +77,7 @@ export default function Login(){
                         </div>
                         <div className="w-full flex flex-col gap-2">
                             <Button className="w-full mt-5 cursor-pointer transition duration-300" disabled={isDisable}>
-                                {   loading?
+                                {   (loading || isDisable)?
                                     <LoaderCircle className="animate-spin"/>:
                                     "Login"    
                                 }

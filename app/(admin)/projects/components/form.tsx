@@ -10,7 +10,7 @@ import { Textarea } from "@/components/ui/textarea"
 import { ResponseApi } from "@/api/type"
 import { Projects } from "@/api/projects"
 import { useEffect, useState } from "react"
-import { X } from "lucide-react"
+import { LoaderCircle, X } from "lucide-react"
 
 interface Props {
     onSubmit: (data: FormData) => void
@@ -132,7 +132,14 @@ export default function FormProject(
                 </div>
 
                 <div className="flex justify-end">
-                    <Button>Save</Button>
+                    
+                    <Button className="cursor-pointer transition duration-300" disabled={isPending}>
+                        {
+                            isPending? 
+                            <LoaderCircle className="animate-spin"/>:
+                            "Save"
+                        }
+                    </Button>
                 </div>
             </form>
         </FormLayout>
