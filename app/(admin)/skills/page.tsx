@@ -1,41 +1,20 @@
 "use client"
-import { Cards } from "@/components/card/card";
-import { CardsAdd } from "@/components/card/card-add";
+// import { Cards } from "@/components/card/card";
+import { CardsAdd } from "@/app/(admin)/skills/components/card-add";
 import { CirclePlus } from "lucide-react";
 import { useState } from "react";
-import { SKILLSDATA } from "@/components/section/skills-section";
-
-export const techCategories = [
-    {
-        category: "Languages",
-        options: ["JavaScript", "TypeScript", "HTML5", "Golang"],
-    },
-    {
-        category: "Frontend Frameworks",
-        options: ["React.js", "Next.js", "Vue.js", "Tanstack Query", "Zustand"],
-    },
-    {
-        category: "Styling & Design",
-        options: ["CSS3", "Tailwind CSS", "Bootstrap CSS", "Shadcn UI", "Ant Design"],
-    },
-    {
-        category: "Backend & Databases",
-        options: ["MongoDB", "MySQL", "Node.js"],
-    },
-];
-
 
 export default function DynamicTechForm() {
 
     const [open,setOpen] = useState(false)
 
     return (
-        <div className="grid grid-cols-4 gap-4 items-start ">
+        <div className="grid grid-cols-3 gap-3 items-start ">
             {/* 
                 @Note
                 - List category, get dari api get all category
             */}
-            {
+            {/* {
                 SKILLSDATA.map((item,i:number) => (
                     <Cards
                         key={i}
@@ -43,7 +22,7 @@ export default function DynamicTechForm() {
                         option={item.options}
                     />
                 ))
-            }
+            } */}
 
             {/* 
                 @Note
