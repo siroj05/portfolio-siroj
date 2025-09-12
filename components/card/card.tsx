@@ -9,11 +9,12 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
+import { item } from "@/api/skills"
 
 interface Props {
   id?: string
   category: string
-  option: any[]
+  option: item[]
 }
 
 export function Cards(
@@ -36,9 +37,9 @@ export function Cards(
 
         {
           option.map((o) => (
-            <div key={o} className="border rounded-lg p-2 flex gap-1">
+            <div key={o.id} className="border rounded-lg p-2 flex gap-1">
               <Image
-                src={o.logo}
+                src={o.icon}
                 alt={o.name}
                 width={25}
                 height={25}

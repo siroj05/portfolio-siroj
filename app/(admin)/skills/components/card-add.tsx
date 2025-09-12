@@ -7,7 +7,7 @@ import {
   CardHeader,
 } from "@/components/ui/card"
 import { Input } from "../../../../components/ui/input"
-import { Camera, Plus, Trash, X } from "lucide-react"
+import { Camera, LoaderCircle, Plus, Trash, X } from "lucide-react"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Button } from "../../../../components/ui/button"
@@ -15,6 +15,7 @@ import React, { useState } from "react"
 import Image from "next/image"
 import { v4 as uuidv4 } from 'uuid';
 import { formSchema, FormData } from "./validation"
+import { useCreateSkill } from "@/api/skills"
 /*
   @note
   - card buat nambah skill
@@ -34,29 +35,34 @@ export function CardsAdd({ setOpen }: Props) {
   } = useForm<FormData>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      items: [],
+      skills: [],
     },
   })
 
   const [file, setFile] = useState<any>()
   const [inputVal, setInputVal] = useState<string>()
+  const { mutate, isPending } = useCreateSkill({
+    onSuccess : () => {
+      setOpen(false)
+    }
+  })
 
-  const items = watch("items")
+  const skills = watch("skills")
   const handleAddItem = () => {
     if (inputVal?.trim() != "" || file) {
-      setValue("items", [...items, { id : uuidv4(), name: inputVal!, image: file }])
+      setValue("skills", [...skills, { id : uuidv4(), name: inputVal!, icon: file }])
       setFile(undefined)
       setInputVal("")
     }
   }
 
   const handleRemoveItem = (id : string) => {
-    const newItem = items.filter((item) => item.id != id)
-    setValue("items", newItem, {shouldValidate : true})
+    const newItem = skills.filter((item) => item.id != id)
+    setValue("skills", newItem, {shouldValidate : true})
   }
 
   const onSubmit = (data: FormData) => {
-    console.log("Submitted Data:", data)
+    mutate(data)
   }
 
   return (
@@ -73,12 +79,12 @@ export function CardsAdd({ setOpen }: Props) {
         </CardHeader>
 
         <CardContent className="space-y-2 flex flex-col gap-2">
-          {items && items.length > 0 && items.map((item) => {
+          {skills && skills.length > 0 && skills.map((item) => {
             return (
               <div className="flex w-full" key={item.id}>
                 <div className="flex w-full gap-2 border py-1 px-2 rounded-xl hover:dark:bg-slate-800 hover:bg-slate-100">
                   <Image
-                    src={URL.createObjectURL(item.image)}
+                    src={URL.createObjectURL(item.icon)}
                     alt={"image"}
                     width={50}
                     height={50}
@@ -123,14 +129,21 @@ export function CardsAdd({ setOpen }: Props) {
               <Plus size={16} />
             </Button>
           </div>
-          {errors.items && (
-            <p className="text-sm text-red-500">{errors.items.message}</p>
+          {errors.skills && (
+            <p className="text-sm text-red-500">{errors.skills.message}</p>
           )}
         </CardContent>
 
         <CardFooter className="flex-col gap-2">
-          <Button type="submit" className="w-full cursor-pointer">
-            Save
+          <Button type="submit" className="w-full cursor-pointer transition duration-300" disabled={skills.length == 0 || isPending}>
+            {
+              isPending?
+              <>
+              <LoaderCircle/>
+              Save 
+              </>:
+              "Save"
+            }
           </Button>
         </CardFooter>
       </Card>
