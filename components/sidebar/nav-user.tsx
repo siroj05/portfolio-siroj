@@ -22,6 +22,7 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar"
 import { CircleUserRound, EllipsisVertical, Power } from "lucide-react"
+import Link from "next/link"
 
 export function NavUser({
   user,
@@ -35,7 +36,7 @@ export function NavUser({
   const { isMobile } = useSidebar()
 
   // pendingnya manfaatin
-  const {mutate, isPending} = useLogout()
+  const { mutate, isPending } = useLogout()
   const onLogout = () => {
     mutate()
   }
@@ -84,13 +85,15 @@ export function NavUser({
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
-              <DropdownMenuItem>
-                <CircleUserRound />
-                Profile
-              </DropdownMenuItem>
+              <Link href={"/profile"} >
+                <DropdownMenuItem className="cursor-pointer">
+                  <CircleUserRound />
+                  Profile
+                </DropdownMenuItem>
+              </Link>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
-            <DropdownMenuItem onClick={onLogout}>
+            <DropdownMenuItem onClick={onLogout} className="cursor-pointer">
               <Power />
               Log out
             </DropdownMenuItem>

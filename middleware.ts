@@ -29,6 +29,7 @@ export const config = {
     "/messages/:path*",
     "/projects/:path*",
     "/skills/:path*",
+    "/profile/:path*",
     "/login",
   ],
 };
