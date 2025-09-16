@@ -7,12 +7,24 @@ import { Textarea } from "@/components/ui/textarea";
 import { X } from "lucide-react";
 import ResizeToolsDialog from "./components/resize-dialog";
 import { useState } from "react";
-
+import { useForm } from "react-hook-form";
+import { FormData, formSchema } from "./components/validation";
+import { zodResolver } from "@hookform/resolvers/zod";
 export default function ProfileUser() {
     const [cropped, setCropped] = useState<File>()
     const handleRemove = () => {
         setCropped(undefined)
     }
+
+    const {
+        register,
+        handleSubmit,
+        reset,
+        resetField,
+        formState : { errors }
+    } = useForm<FormData>({
+        resolver : zodResolver(formSchema)
+    })
 
     return (
         <FormLayout>
