@@ -120,7 +120,7 @@ export default function ResizeToolsDialog({setCropped}:Props) {
                 <div className="flex justify-center">
                     {file &&
                         <ReactCrop crop={crop} onChange={c => setCrop({ ...crop, x: c.x, y: c.y })} onComplete={(c) => setCompletedCrop(c)} locked>
-                            <img ref={imgRef} src={URL.createObjectURL(file)} width={200} height={200}/>
+                            <img ref={imgRef} src={URL.createObjectURL(file)} className="w-[200px] h-[230px]"/>
                         </ReactCrop>
                     }
                 </div>
