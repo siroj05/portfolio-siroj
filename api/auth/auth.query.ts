@@ -1,7 +1,9 @@
-import { useMutation } from "@tanstack/react-query";
-import { AuthLogout } from "./auth.api";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { AuthLogout, GetMe } from "./auth.api";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
+import { ResponseApi } from "../type";
+import { GetMeModel } from "./type";
 
 export function useLogout () {
     const router = useRouter()
@@ -15,5 +17,12 @@ export function useLogout () {
         onError:(err) => {
             toast.error(`Log out failed : ${err.message}`)
         }
+    })
+}
+
+export function useGetMe () {
+    return useQuery<ResponseApi<GetMeModel>>({
+        queryKey : ["user"],
+        queryFn : GetMe
     })
 }

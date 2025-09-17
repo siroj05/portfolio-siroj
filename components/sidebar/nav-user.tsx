@@ -1,6 +1,6 @@
 "use client"
 
-import { useLogout } from "@/api/auth"
+import { useGetMe, useLogout } from "@/api/auth"
 import {
   Avatar,
   AvatarFallback,
@@ -23,6 +23,7 @@ import {
 } from "@/components/ui/sidebar"
 import { CircleUserRound, EllipsisVertical, Power } from "lucide-react"
 import Link from "next/link"
+import { Skeleton } from "../ui/skeleton"
 
 export function NavUser({
   user,
@@ -40,6 +41,8 @@ export function NavUser({
   const onLogout = () => {
     mutate()
   }
+
+  const { data: userData, isError, isLoading } = useGetMe()
 
   return (
     <SidebarMenu>
@@ -85,12 +88,18 @@ export function NavUser({
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
-              <Link href={"/profile"} >
-                <DropdownMenuItem className="cursor-pointer">
-                  <CircleUserRound />
-                  Profile
+              {isLoading ?
+                <DropdownMenuItem>
+                  <Skeleton className="h-[20px] w-full"/>
                 </DropdownMenuItem>
-              </Link>
+                :
+                <Link href={`/profile/${userData?.data.id}`} >
+                  <DropdownMenuItem className="cursor-pointer">
+                    <CircleUserRound />
+                    Profile
+                  </DropdownMenuItem>
+                </Link>
+              }
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
             <DropdownMenuItem onClick={onLogout} className="cursor-pointer">

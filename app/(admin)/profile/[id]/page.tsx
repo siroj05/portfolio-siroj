@@ -5,17 +5,20 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { X } from "lucide-react";
-import ResizeToolsDialog from "./components/resize-dialog";
+import ResizeToolsDialog from "../components/resize-dialog";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { FormData, formSchema } from "./components/validation";
+import { FormData, formSchema } from "../components/validation";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useParams } from "next/navigation";
+
 export default function ProfileUser() {
+    const param = useParams()
     const [cropped, setCropped] = useState<File>()
     const handleRemove = () => {
         setCropped(undefined)
     }
-
+    console.log(param.id)
     const {
         register,
         handleSubmit,
