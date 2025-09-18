@@ -132,7 +132,7 @@ export default function ResizeToolsDialog({setCropped}:Props) {
                         className="hidden"
                         onChange={(e) => handleFileChange(e)}
                     />
-                    <label htmlFor="profile" className="flex justify-center items-center h-[300px] border-dashed border-2 hover:bg-zinc-900 cursor-pointer">
+                    <label htmlFor="profile" className="flex justify-center items-center h-[300px] border-dashed border-2 dark:hover:bg-zinc-900 hover:bg-zinc-100 cursor-pointer">
                         <Camera />
                     </label>
                     <p className="text-xs text-red-500">{error}</p>
