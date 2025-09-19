@@ -18,7 +18,7 @@ export default function ProfileUser() {
     const handleRemove = () => {
         setCropped(undefined)
     }
-    console.log(param.id)
+ 
     const {
         register,
         handleSubmit,
@@ -29,9 +29,13 @@ export default function ProfileUser() {
         resolver : zodResolver(formSchema)
     })
 
+    const onSubmit = (data : FormData) => {
+      
+    } 
+
     return (
         <FormLayout>
-            <form action="" className="space-y-3">
+            <form onSubmit={handleSubmit(onSubmit)} className="space-y-3">
                 {!cropped && <ResizeToolsDialog setCropped={setCropped} />}
                 {/* hasil crop gambar tampilkan disini */}
                 {cropped &&
