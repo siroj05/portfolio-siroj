@@ -30,7 +30,7 @@ export default function ProfileUser() {
     })
 
     const onSubmit = (data : FormData) => {
-      
+      console.log(data)
     } 
 
     return (
