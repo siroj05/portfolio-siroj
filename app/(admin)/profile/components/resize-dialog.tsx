@@ -9,10 +9,10 @@ import { Button } from "@/components/ui/button";
 import { Camera } from "lucide-react";
 
 interface Props {
-    setCropped : (value : File) => void
+    setCropped: (value: File) => void
 }
 
-export default function ResizeToolsDialog({setCropped}:Props) {
+export default function ResizeToolsDialog({ setCropped }: Props) {
 
     const [crop, setCrop] = useState<Crop>({
         unit: "px",
@@ -90,16 +90,53 @@ export default function ResizeToolsDialog({setCropped}:Props) {
             } else {
                 setError("")
                 setFile(selected)
+                setCompletedCrop({
+                    unit: "px",
+                    width: 200,
+                    height: 200,
+                    x: 0,
+                    y: 0
+                })
             }
         }
     }
     const handleSaveCrop = () => {
-        if (!previewCanvasRef.current) return
-        previewCanvasRef.current.toBlob((blob) => {
-            if (!blob) return
-            const file = new File([blob], "cropped-image.png", { type: "image/png" })
-            setCropped(file)
-        }, "image/png")
+        if (!previewCanvasRef.current || !imgRef.current || !completedCrop) return;
+
+        const image = imgRef.current;
+        const canvas = previewCanvasRef.current;
+        const crop = completedCrop;
+
+        const scaleX = image.naturalWidth / image.width;
+        const scaleY = image.naturalHeight / image.height;
+        const ctx = canvas.getContext("2d");
+        if (!ctx) return;
+
+        const pixelRatio = window.devicePixelRatio;
+        canvas.width = crop.width * pixelRatio;
+        canvas.height = crop.height * pixelRatio;
+
+        ctx.setTransform(pixelRatio, 0, 0, pixelRatio, 0, 0);
+        ctx.imageSmoothingQuality = "high";
+
+        ctx.drawImage(
+            image,
+            crop.x * scaleX,
+            crop.y * scaleY,
+            crop.width * scaleX,
+            crop.height * scaleY,
+            0,
+            0,
+            crop.width,
+            crop.height
+        );
+
+        // baru bikin File
+        canvas.toBlob((blob) => {
+            if (!blob) return;
+            const file = new File([blob], "cropped-image.png", { type: "image/png" });
+            setCropped(file);
+        }, "image/png");
     }
 
     return (
@@ -112,15 +149,20 @@ export default function ResizeToolsDialog({setCropped}:Props) {
                     <DialogClose asChild>
                         <Button onClick={handleCancel} variant="outline">Cancel</Button>
                     </DialogClose>
-                    <Button type="submit" onClick={handleSaveCrop}>Save</Button>
+                    <Button type="submit" disabled={previewCanvasRef.current == null} onClick={handleSaveCrop}>Save</Button>
                 </DialogFooter>
             }
         >
             <div>
                 <div className="flex justify-center">
                     {file &&
-                        <ReactCrop crop={crop} onChange={c => setCrop({ ...crop, x: c.x, y: c.y })} onComplete={(c) => setCompletedCrop(c)} locked>
-                            <img ref={imgRef} src={URL.createObjectURL(file)} className="w-[200px] h-[230px]"/>
+                        <ReactCrop
+                            crop={crop}
+                            onChange={c => setCrop({ ...crop, x: c.x, y: c.y })}
+                            onComplete={(c) => setCompletedCrop(c)}
+                            locked
+                        >
+                            <img ref={imgRef} src={URL.createObjectURL(file)} className="w-[200px] h-[230px]" />
                         </ReactCrop>
                     }
                 </div>
