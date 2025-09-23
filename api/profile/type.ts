@@ -1,7 +1,7 @@
 export type ProfileModel = {
-    id : string
-    userId : number
-    image : any
+    id? : string
+    userId? : number | undefined
+    image? : any
     fullName : string
     jobTitle : string
     email : string

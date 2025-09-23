@@ -6,33 +6,42 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { X } from "lucide-react";
 import ResizeToolsDialog from "../components/resize-dialog";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { FormData, formSchema } from "../components/validation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useParams } from "next/navigation";
+import { Button } from "@/components/ui/button";
+import { useCreateProfile } from "@/api/profile";
 
 export default function ProfileUser() {
     const param = useParams()
     const [cropped, setCropped] = useState<File>()
+    const {mutate, isPending} = useCreateProfile()
     const handleRemove = () => {
         setCropped(undefined)
     }
- 
     const {
+        setValue,
         register,
         handleSubmit,
         reset,
         resetField,
+        watch,
         formState : { errors }
     } = useForm<FormData>({
         resolver : zodResolver(formSchema)
     })
 
-    const onSubmit = (data : FormData) => {
-      console.log(data)
-    } 
+    useEffect(() => {
+        setValue("image", cropped)
+    },[cropped])
 
+    const onSubmit = (data : FormData) => {
+        data.userId = parseInt(param!.id!.toString())
+        console.log(data)
+        mutate(data)
+    } 
     return (
         <FormLayout>
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-3">
@@ -54,7 +63,7 @@ export default function ProfileUser() {
                 <div className="space-y-2">
                     <Label htmlFor="fullName">Full Name</Label>
                     <div>
-                        <Input id="fullName" placeholder="Enter your full name" />
+                        <Input {...register("fullName")} id="fullName" placeholder="Enter your full name" />
                     </div>
                 </div>
 
@@ -62,34 +71,37 @@ export default function ProfileUser() {
                 <div className="space-y-2">
                     <Label htmlFor="job">Job Title</Label>
                     <div>
-                        <Input id="job" placeholder="Enter your job title" />
+                        <Input {...register("jobTitle")} id="job" placeholder="Enter your job title" />
                     </div>
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
                     <div className="space-y-2">
                         <Label htmlFor="email">Your Email</Label>
                         <div>
-                            <Input id="email" type="email" placeholder="Enter your email" />
+                            <Input {...register("email")} id="email" type="email" placeholder="Enter your email" />
                         </div>
                     </div>
                     <div className="space-y-2">
                         <Label htmlFor="linkedin">Your LinkedIn</Label>
                         <div>
-                            <Input id="linkedin" type="url" placeholder="Enter your LinkedIn profile" />
+                            <Input {...register("linkedin")} id="linkedin" type="url" placeholder="Enter your LinkedIn profile" />
                         </div>
                     </div>
                     <div className="space-y-2">
                         <Label htmlFor="repository">Your Repository</Label>
                         <div>
-                            <Input id="repository" type="url" placeholder="Enter your repository URL" />
+                            <Input {...register("repository")} id="repository" type="url" placeholder="Enter your repository URL" />
                         </div>
                     </div>
                 </div>
                 <div className="space-y-2">
                     <Label htmlFor="about">About</Label>
                     <div>
-                        <Textarea id="about" placeholder="Tell us about yourself" />
+                        <Textarea {...register("about")} id="about" placeholder="Tell us about yourself" />
                     </div>
+                </div>
+                <div className="flex justify-end">
+                    <Button variant="default" className="cursor-pointer">Save</Button>
                 </div>
             </form>
         </FormLayout>
