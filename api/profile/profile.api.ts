@@ -1,6 +1,7 @@
 import axios from "axios"
 import { BASE_URL } from "../messages"
 import { ProfileModel } from "./type"
+import { ResponseApi } from "../type"
 
 export const CreateProfile = async ({
     // id,
@@ -12,9 +13,9 @@ export const CreateProfile = async ({
     linkedin,
     repository,
     about
-}:ProfileModel) => {
+}: ProfileModel) => {
     const formData = new FormData()
-    if (image){
+    if (image) {
         formData.append("image", image)
     }
     formData.append("userId", userId!.toString()!)
@@ -29,12 +30,28 @@ export const CreateProfile = async ({
         const res = await axios.post(`${BASE_URL}/profile/save`,
             formData,
             {
-                withCredentials : true,
-                headers : {
-                    "Content-Type" : "multipart/form-data"
+                withCredentials: true,
+                headers: {
+                    "Content-Type": "multipart/form-data"
                 }
             }
         )
+        return res.data
+    } catch (error) {
+        if (axios.isAxiosError(error)) {
+            const errorMsg =
+                typeof error.response?.data === "string"
+                    ? error.response.data
+                    : error.response?.data?.message || "Error fetching data";
+            throw new Error(errorMsg.trim());
+        }
+        throw new Error("An unexpected error occurred");
+    }
+}
+
+export const GetProfileById = async <T = ProfileModel>(id : number): Promise<ResponseApi<T>> => {
+    try {
+        const res = await axios.get(`${BASE_URL}/profile/${id}`, { withCredentials: true })
         return res.data
     } catch (error) {
         if (axios.isAxiosError(error)) {

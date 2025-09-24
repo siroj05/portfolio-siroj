@@ -16,6 +16,8 @@ import { Separator } from "../ui/separator"
 import { usePathname } from "next/navigation"
 import { Badge } from "../ui/badge"
 import { useGetAllMessages } from "@/api/messages"
+import { useGetMe } from "@/api/auth"
+import { Skeleton } from "../ui/skeleton"
 
 const menu = [
     {
@@ -49,7 +51,7 @@ export default function AppSidebar({ ...props }: React.ComponentProps<typeof Sid
     const params = usePathname()
     const { data, isError, isLoading } = useGetAllMessages()
     const countUnread = !isError ? data?.data.filter((msg) => msg.isRead == false).length : isLoading ? 0 : data?.data.filter((msg) => msg.isRead == false).length
-
+    const { data: userData, isError:errorUser, isLoading:loadingUser } = useGetMe()
     return (
         <Sidebar collapsible="offcanvas" {...props}>
             <SidebarHeader>
@@ -116,11 +118,13 @@ export default function AppSidebar({ ...props }: React.ComponentProps<typeof Sid
                 </SidebarGroup>
             </SidebarContent>
             <SidebarFooter>
-                <NavUser user={{
-                    name: "Siroojuddin Apendi",
-                    email: "rojudin123@gmail.com",
-                    avatar: "/siroj.png",
-                }} />
+                {
+                    loadingUser ?
+                    <Skeleton className="h-10" />:
+                    <NavUser 
+                    userData={userData?.data!} 
+                    />
+                }
             </SidebarFooter>
         </Sidebar>
     )
