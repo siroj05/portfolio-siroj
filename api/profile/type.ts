@@ -9,4 +9,6 @@ export type ProfileModel = {
     linkedin : string
     repository : string
     about : string
+    phoneNumber : string
+    location : string
 }

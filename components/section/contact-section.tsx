@@ -6,11 +6,20 @@ import {
 } from "lucide-react";
 import FormContact from "../form/form-contact";
 
+interface Props {
+  email : string
+  location : string
+  phoneNumber : string
+  isLoading : boolean
+  isSuccess : boolean
+  
+}
+
 export default function ContactSection() {
   return (
     <section id="#contact" className="space-y-10">
       <h1 className="text-center font-bold text-4xl max-[426px]:text-3xl">Contact Me</h1>
-      <div className="flex max-w-4xl justify-between mx-auto gap-5">
+      <div className="flex max-w-4xl max-sm:flex-col justify-between mx-auto gap-5">
         {/* contact */}
         <div className="space-y-10 w-full">
           <div className="flex flex-col justify-center gap-3">

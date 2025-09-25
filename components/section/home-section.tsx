@@ -1,5 +1,6 @@
 "use client";
 
+import { ProfileModel, useGetProfileMe } from "@/api/profile";
 import { Button } from "@/components/ui/button";
 import {
     Briefcase,
@@ -9,17 +10,33 @@ import {
 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import { LoadingDots } from "../loading/loadings";
 
+interface Props {
+    data : ProfileModel
+    isLoading : boolean
+    isError : boolean
+    isSuccess : boolean
+}
 
-export default function HomeSection() {
+export default function HomeSection({
+    data,
+    isLoading,
+    isError,
+    isSuccess
+}:Props) {
     return(
         <section id="home">
             <div className="container mx-auto text-center">
-                <div className="max-w-4xl mx-auto">
+                {
+                    isLoading?
+                    <LoadingDots/>
+                    :isSuccess?    
+                    <div className="max-w-4xl mx-auto">
                     {/* foto profile */}
                     <div className="w-[200px] h-[200px] mx-auto mb-10">
                         <Image
-                            src={"/siroj.png"}
+                            src={data?.imagePath!}
                             alt={"avatar"}
                             width={100}
                             height={100}
@@ -31,15 +48,15 @@ export default function HomeSection() {
 
                     <div className="space-y-6">
                         {/* full name */}
-                        <h1 className="font-bold text-6xl max-[691px]:text-5xl max-[426px]:text-3xl">Siroojuddin Apendi</h1>
+                        <h1 className="font-bold text-6xl max-[691px]:text-5xl max-[426px]:text-3xl">{data?.fullName}</h1>
 
                         {/* passion */}
-                        <h1 className="text-blue-500 text-4xl max-[691px]:text-3xl max-[426px]:text-xl">Frontend Developer</h1>
+                        <h1 className="text-blue-500 text-4xl max-[691px]:text-3xl max-[426px]:text-xl">{data?.jobTitle}</h1>
 
                         {/* kontak & view work */}
                         <div className="flex justify-center gap-2">
                             <Button size="lg" asChild>
-                                <a href="mailto:rojudin123@gmail.com">
+                                <a href={`mailto:${data?.email}`}>
                                     <Mail />
                                     Get In Touch
                                 </a>
@@ -54,18 +71,20 @@ export default function HomeSection() {
 
                         {/* sosial media */}
                         <div className="flex justify-center gap-4">
-                            <Link href={"https://github.com/siroj05"} target="_blank">
+                            <Link href={`${data?.repository}`} target="_blank">
                                 <Github />
                             </Link>
-                            <Link href={"https://www.linkedin.com/in/siroojuddin-apendi-121a6a1a0/"} target="_blank">
+                            <Link href={`${data?.linkedin}`} target="_blank">
                                 <Linkedin />
                             </Link>
-                            <a href="mailto:rojudin123@gmail.com">
+                            <a href={`mailto:${data?.email}`}>
                                 <Mail />
                             </a>
                         </div>
                     </div>
-                </div>
+                    </div>:isError&&
+                    <p className="text-center">Something went wrong</p>
+                }
             </div>
         </section>
     )

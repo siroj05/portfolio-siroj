@@ -1,5 +1,5 @@
 import { QueryClient, useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
-import { CreateProfile, GetProfileById } from "./profile.api"
+import { CreateProfile, GetProfileById, GetProfileMe } from "./profile.api"
 import { toast } from "sonner"
 import { ResponseApi } from "../type"
 import { ProfileModel } from "./type"
@@ -21,6 +21,13 @@ export const useCreateProfile = () => {
 export const useGetProfile = (id : number) => {
     return useQuery<ResponseApi<ProfileModel>>({
         queryKey : ["profile", id],
-        queryFn : () => GetProfileById(id),
+        queryFn : () => GetProfileById(id)
+    })
+}
+
+export const useGetProfileMe = () => {
+    return useQuery<ResponseApi<ProfileModel[]>>({
+        queryKey : ["profile"],
+        queryFn : GetProfileMe
     })
 }

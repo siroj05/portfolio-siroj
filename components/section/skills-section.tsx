@@ -146,7 +146,7 @@ export default function SkillsSection() {
             </p>  
           )
             : isError &&
-            <p className="text-red-500 text-xs">{error.message}</p>
+            <p className="text-red-500 text-xs text-center">{error.message}</p>
           }
         </div>
       </div>

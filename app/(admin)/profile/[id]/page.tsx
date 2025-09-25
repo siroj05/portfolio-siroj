@@ -4,7 +4,7 @@ import { FormLayout } from "@/components/layout/form-layout";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { LoaderCircle, X } from "lucide-react";
+import { LoaderCircle, MapPin, X } from "lucide-react";
 import ResizeToolsDialog from "../components/resize-dialog";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
@@ -15,12 +15,14 @@ import { Button } from "@/components/ui/button";
 import { useCreateProfile, useGetProfile } from "@/api/profile";
 import { Skeleton } from "@/components/ui/skeleton";
 import { LoadingForm } from "../components/loading";
+import { PhoneInput } from "@/components/ui/phone-input";
 
 export default function ProfileUser() {
     const param = useParams()
     const [cropped, setCropped] = useState<File>()
     const {mutate, isPending} = useCreateProfile()
-    const { data:profile, isLoading } = useGetProfile(parseInt(param.id!.toString()))
+    const { data:profile, isLoading, error } = useGetProfile(parseInt(param.id!.toString()))
+
     const [defaultImg, setDefaultImg] = useState<string>()
     const handleRemove = () => {
         setCropped(undefined)
@@ -31,6 +33,7 @@ export default function ProfileUser() {
         register,
         handleSubmit,
         reset,
+        watch,
         formState : { errors }
     } = useForm<FormData>({
         resolver : zodResolver(formSchema)
@@ -49,7 +52,9 @@ export default function ProfileUser() {
             email : profile?.data.email,
             linkedin : profile?.data.linkedin,
             repository : profile?.data.repository,
-            about : profile?.data.about
+            about : profile?.data.about,
+            location : profile?.data.location,
+            phoneNumber: profile?.data.phoneNumber
         })
         setDefaultImg(profile?.data.imagePath)
     },[profile?.data])
@@ -63,6 +68,7 @@ export default function ProfileUser() {
     if(isLoading) {
         return <LoadingForm/>
     }
+
     return (
         <FormLayout>
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-3">
@@ -114,6 +120,20 @@ export default function ProfileUser() {
                         <p className="text-sm text-red-500 font-light">{errors.jobTitle?.message}</p>
                     </div>
                 </div>
+                <div className="space-y-2">
+                    <Label htmlFor="location">Location</Label>
+                    <div>
+                        <Input {...register("location")} id="location" placeholder="Enter your location" />
+                        {/* <p className="text-sm text-red-500 font-light">{errors.jobTitle?.message}</p> */}
+                    </div>
+                </div>
+                <div className="space-y-2">
+                    <Label htmlFor="phoneNumber">Phone Number</Label>
+                    <div className="flex gap-1">
+                        <PhoneInput value={watch("phoneNumber")} onChange={(e) => setValue("phoneNumber", e.toString())} className="w-[280px]" maxLength={15} defaultCountry="ID" international={false} />
+                    </div>
+                </div>
+                
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
                     <div className="space-y-2">
                         <Label htmlFor="email">Your Email</Label>
