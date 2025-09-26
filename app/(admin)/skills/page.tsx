@@ -62,9 +62,9 @@ export default function DynamicTechForm() {
                     - List category, get dari api get all category
                 */}
         {/* data ready */}
-        {categories?.data.map((item, i: number) => (
+        {categories?.data.map((item) => (
           <Cards
-            key={i}
+            key={item.id}
             category={item.category}
             option={item.skills}
             id={item.id}

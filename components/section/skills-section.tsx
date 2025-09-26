@@ -27,7 +27,7 @@ export default function SkillsSection() {
 
                     {
                       categories.data.map((skill) => (
-                        <div key={skill.category} className=" border rounded-xl py-3 w-[270px] max-[1240px]:w-full hover:ring-2 hover:ring-blue-500 transition-all duration-200 p-5 space-y-4">
+                        <div key={skill.id} className=" border rounded-xl py-3 w-[270px] max-[1240px]:w-full hover:ring-2 hover:ring-blue-500 transition-all duration-200 p-5 space-y-4">
                           <h1 className="my-5 font-bold text-xl">{skill.category}</h1>
                           <div className="space-y-4 max-[590px]:grid max-[470px]:grid-cols-2 gap-2 max-[410px]:grid-cols-1">
                             {skill.skills.map((item) => (
