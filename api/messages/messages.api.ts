@@ -6,11 +6,12 @@ import axios from "axios"
 // next ganti .env
 export const BASE_URL = config.baseUrl
 
-export const CreateMessage = async ({ email, message }: Messages) => {
+export const CreateMessage = async ({ email, message, token }: Messages) => {
     try {
         const res = await axios.post(`${BASE_URL}/messages/send`, {
             email,
-            message
+            message,
+            token
         })
 
         return res.data

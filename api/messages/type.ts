@@ -4,6 +4,7 @@ export type Messages = {
     message : string
     isRead? : boolean
     createdAt? : string
+    token? : string
 }
 
 export type Mark = {

@@ -5,6 +5,7 @@ import { ProgressProviders } from "@/lib/progress-providers";
 import { TooltipProvider } from "@/components/ui/tooltip"
 import { Providers } from "@/lib/providers";
 import { Toaster } from "@/components/ui/sonner";
+import Script from "next/script";
 
 const jakartaSans = Plus_Jakarta_Sans({
   subsets: ["latin"],
@@ -29,6 +30,7 @@ export default function RootLayout({
           <Providers>
             <TooltipProvider>
               {children}
+              <Script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer />
             </TooltipProvider>
           </Providers>
         </ProgressProviders>

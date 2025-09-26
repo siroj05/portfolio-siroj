@@ -11,16 +11,18 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { LabelError } from "../label-error"
 import { toast } from "sonner"
 import { useCreateMessage } from "@/api/messages"
+import { useCaptcha } from "@/hooks/use-captcha"
 
 const formSchema = z.object({
     email: z.email().min(1, "Email is required").max(50, "Email too long"),
-    message: z.string().min(1, "Message is required").max(500, "Message too long")
+    message: z.string().min(1, "Message is required").max(500, "Message too long"),
+    token : z.string().optional()
 })
 
 type FormData = z.infer<typeof formSchema>
 
 export default function FormContact() {
-
+    const tokenCaptcha = useCaptcha()
     const {
         handleSubmit,
         register,
@@ -42,6 +44,8 @@ export default function FormContact() {
     })
 
     const onSubmit = (data: FormData) => {
+        data.token = tokenCaptcha
+        console.log(data)
         mutate(data)
     }
 
@@ -77,6 +81,7 @@ export default function FormContact() {
                         }
                         Send Message
                     </Button>
+                    <div id="cf-turnstile-contact"></div>
                 </form>
             </div>
         </div>

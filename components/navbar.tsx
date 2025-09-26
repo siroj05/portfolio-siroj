@@ -5,8 +5,22 @@ import { Menu, X } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
 import ThemeToggleButton from "./themeToggleBtn";
+import { ProfileModel } from "@/api/profile";
+import { Skeleton } from "./ui/skeleton";
 
-export default function Navbar() {
+interface Props {
+  data : ProfileModel
+  isLoading : boolean
+  isSuccess : boolean
+  isError : boolean
+}
+
+export default function Navbar({
+  data,
+  isLoading,
+  isSuccess,
+  isError
+}:Props) {
   const { isMobile, isTablet } = useDeviceSize();
   const [open, setOpen] = useState(false);
 
@@ -15,7 +29,13 @@ export default function Navbar() {
   return (
     <nav className="border-b shadow sticky z-40 top-0 dark:bg-black/80 backdrop-blur-md bg-white/80">
       <div className="flex justify-between items-center mx-10 max-[426px]:mx-1 p-4">
-        <h1 className="font-bold text-2xl text-black dark:text-white max-[426px]:text-sm">Siroojuddin Apendi</h1>
+        {
+          isLoading?
+            <Skeleton className="h-8 w-[200px]" /> 
+          : isSuccess?
+        <h1 className="font-bold text-2xl text-black dark:text-white max-[426px]:text-sm">{data.fullName}</h1>
+          :isError && <p>Something went wrong</p>
+      }
 
         {(isTablet || isMobile) ? (
           <>

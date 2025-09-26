@@ -12,11 +12,16 @@ import SkillsSection from "@/components/section/skills-section";
 export default function Portfolio() {
   const {data:profile, isLoading, isError, isSuccess} = useGetProfileMe()
   const data = profile?.data[0]
-  console.log(data)
+
   return (
     <div>
       {/* navbar */}
-      <Navbar />
+      <Navbar 
+        data={data!}
+        isError={isError}
+        isLoading={isLoading}
+        isSuccess={isSuccess}
+      />
       <div className="space-y-20 my-10 max-[691px]:mx-10">
         {/* hero section */}
         <HomeSection
@@ -44,7 +49,12 @@ export default function Portfolio() {
         <ExperienceSection/>
 
         {/* contact */}
-        <ContactSection/>
+        <ContactSection
+          data={data!}
+          isLoading={isLoading}
+          isError={isError}
+          isSuccess={isSuccess}
+        />
       </div>
 
       {/* footer */}

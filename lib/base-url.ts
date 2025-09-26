@@ -1,0 +1,1 @@
+export const CAPTCHA_URL = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY
