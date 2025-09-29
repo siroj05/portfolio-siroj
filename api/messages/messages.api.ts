@@ -17,11 +17,8 @@ export const CreateMessage = async ({ email, message, token }: Messages) => {
         return res.data
     } catch (error) {
         if (axios.isAxiosError(error)) {
-            const errorMsg =
-                typeof error.response?.data === "string"
-                    ? error.response.data
-                    : error.response?.data?.message || "Error fetching data";
-            throw new Error(errorMsg.trim());
+            const errorMsg = error.response?.data?.messages || "Internal server error"
+            throw new Error(errorMsg);
         }
         throw new Error("An unexpected error occurred");
     }

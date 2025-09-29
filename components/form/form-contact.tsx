@@ -39,13 +39,12 @@ export default function FormContact() {
             reset()
         },
         onError: (err) => {
-            toast.error(`Failed error : ${err}`)
+            toast.error(`${err}`)
         }
     })
 
     const onSubmit = (data: FormData) => {
         data.token = tokenCaptcha
-        console.log(data)
         mutate(data)
     }
 
