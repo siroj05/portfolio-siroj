@@ -1,5 +1,6 @@
 "use client"
 
+import { GetMeModel, useGetMe, useLogout } from "@/api/auth"
 import {
   Avatar,
   AvatarFallback,
@@ -21,17 +22,24 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar"
 import { CircleUserRound, EllipsisVertical, Power } from "lucide-react"
+import Link from "next/link"
+import { Skeleton } from "../ui/skeleton"
+import { useGetProfile } from "@/api/profile"
 
 export function NavUser({
-  user,
+  userData,
 }: {
-  user: {
-    name: string
-    email: string
-    avatar: string
-  }
+  userData : GetMeModel
 }) {
   const { isMobile } = useSidebar()
+
+  // pendingnya manfaatin
+  const { mutate, isPending } = useLogout()
+  const onLogout = () => {
+    mutate()
+  }
+
+  const { data:user, isLoading, isFetched, isFetching } = useGetProfile(userData.id)
 
   return (
     <SidebarMenu>
@@ -43,16 +51,16 @@ export function NavUser({
               className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
             >
               <Avatar className="h-8 w-8 rounded-lg grayscale">
-                <AvatarImage src={user.avatar} alt={user.name} />
+                <AvatarImage src={user?.data.imagePath} alt={user?.data.fullName} />
                 <AvatarFallback className="rounded-lg">CN</AvatarFallback>
               </Avatar>
               <div className="grid flex-1 text-left text-sm leading-tight">
-                <span className="truncate font-medium">{user.name}</span>
+                <span className="truncate font-medium">{user?.data.fullName}</span>
                 <span className="text-muted-foreground truncate text-xs">
-                  {user.email}
+                  {user?.data.email}
                 </span>
               </div>
-              <EllipsisVertical  className="ml-auto size-4" />
+              <EllipsisVertical className="ml-auto size-4" />
             </SidebarMenuButton>
           </DropdownMenuTrigger>
           <DropdownMenuContent
@@ -64,27 +72,35 @@ export function NavUser({
             <DropdownMenuLabel className="p-0 font-normal">
               <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
                 <Avatar className="h-8 w-8 rounded-lg">
-                  <AvatarImage src={user.avatar} alt={user.name} />
+                  <AvatarImage src={user?.data.imagePath} alt={user?.data.fullName} />
                   <AvatarFallback className="rounded-lg">CN</AvatarFallback>
                 </Avatar>
                 <div className="grid flex-1 text-left text-sm leading-tight">
-                  <span className="truncate font-medium">{user.name}</span>
+                  <span className="truncate font-medium">{user?.data.fullName}</span>
                   <span className="text-muted-foreground truncate text-xs">
-                    {user.email}
+                    {user?.data.email}
                   </span>
                 </div>
               </div>
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
-              <DropdownMenuItem>
-                <CircleUserRound  />
-                Profile
-              </DropdownMenuItem>
+              {isLoading ?
+                <DropdownMenuItem>
+                  <Skeleton className="h-[20px] w-full"/>
+                </DropdownMenuItem>
+                :
+                <Link href={`/profile/${userData?.id}`} >
+                  <DropdownMenuItem className="cursor-pointer">
+                    <CircleUserRound />
+                    Profile
+                  </DropdownMenuItem>
+                </Link>
+              }
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>
-              <Power  />
+            <DropdownMenuItem onClick={onLogout} className="cursor-pointer">
+              <Power />
               Log out
             </DropdownMenuItem>
           </DropdownMenuContent>

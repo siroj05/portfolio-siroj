@@ -12,23 +12,22 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover"
 import { UseFormSetValue } from "react-hook-form"
+import { format } from "date-fns"
 
 interface DateProps {
-    setValue : UseFormSetValue<any>
-    value? : Date
-    state : string
-    readonly? : boolean
+  setValue: UseFormSetValue<any>
+  value?: string
+  state: string
+  readonly?: boolean
 }
 
 export function DatePicker({
-    setValue,
-    value,
-    state,
-    readonly=false
-}:DateProps) {
+  setValue,
+  value,
+  state,
+  readonly = false
+}: DateProps) {
   const [open, setOpen] = React.useState(false)
-  const [date, setDate] = React.useState<Date | undefined>(undefined)
-
   return (
     <div className="flex flex-col gap-3">
       <Popover open={open} onOpenChange={setOpen}>
@@ -39,18 +38,21 @@ export function DatePicker({
             className="w-48 justify-between font-normal"
             disabled={readonly}
           >
-            {value ? value.toLocaleDateString() : "Select date"}
+            {value ? format(value, "dd/MM/yyyy") : "Select date"}
             <ChevronDownIcon />
           </Button>
         </PopoverTrigger>
         <PopoverContent className="w-auto overflow-hidden p-0" align="start">
           <Calendar
             mode="single"
-            selected={date}
+            selected={value ? new Date(value) : new Date()}
             captionLayout="dropdown"
             onSelect={(date) => {
-              setValue(state, date)
-              setOpen(false)
+              if (date) {
+                const formatted = format(date, "yyyy-MM-dd") // simpan sebagai string
+                setValue(state, formatted)
+                setOpen(false)
+              }
             }}
           />
         </PopoverContent>
