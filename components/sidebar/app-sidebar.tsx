@@ -51,7 +51,7 @@ export default function AppSidebar({ ...props }: React.ComponentProps<typeof Sid
     const params = usePathname()
     const { data, isError, isLoading } = useGetAllMessages()
     const countUnread = !isError ? data?.data.filter((msg) => msg.isRead == false).length : isLoading ? 0 : data?.data.filter((msg) => msg.isRead == false).length
-    const { data: userData, isError:errorUser, isLoading:loadingUser } = useGetMe()
+    const { data: userData, isError: errorUser, isLoading: loadingUser } = useGetMe()
     return (
         <Sidebar collapsible="offcanvas" {...props}>
             <SidebarHeader>
@@ -113,6 +113,14 @@ export default function AppSidebar({ ...props }: React.ComponentProps<typeof Sid
                                     </Link>
                                 </SidebarMenuButton>
                             </SidebarMenuItem>
+                            <SidebarMenuItem>
+                                <SidebarMenuButton className="dark:bg-primary bg-zinc-200 hover:bg-zinc-300 dark:hover:bg-white dark:text-slate-600" asChild>
+                                    <Link href={"/portfolio-v2"} className="flex justify-between" target="_blank">
+                                        View v2
+                                        <SquareArrowOutUpRight />
+                                    </Link>
+                                </SidebarMenuButton>
+                            </SidebarMenuItem>
                         </SidebarMenu>
                     </SidebarGroupContent>
                 </SidebarGroup>
@@ -120,10 +128,10 @@ export default function AppSidebar({ ...props }: React.ComponentProps<typeof Sid
             <SidebarFooter>
                 {
                     loadingUser ?
-                    <Skeleton className="h-10" />:
-                    <NavUser 
-                    userData={userData?.data!} 
-                    />
+                        <Skeleton className="h-10" /> :
+                        <NavUser
+                            userData={userData?.data!}
+                        />
                 }
             </SidebarFooter>
         </Sidebar>
