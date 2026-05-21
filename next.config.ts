@@ -2,7 +2,7 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   /* config options here */
-
+  output: "standalone",
   typescript: {
     // !! WARN !!
     // Dangerously allow production builds to successfully complete even if
@@ -11,7 +11,7 @@ const nextConfig: NextConfig = {
     ignoreBuildErrors: true,
   },
   images : {
-    domains : ["localhost"]
+    domains : ["localhost", "portfolio-be.43.157.248.30.sslip.io"]
   },
   eslint: {
     ignoreDuringBuilds: true,
